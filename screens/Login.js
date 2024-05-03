@@ -8,47 +8,16 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // const handleLogin = async () => {
-  //   try {
-  //     const credentials = await login(email, password);
-  //     console.log(`credentials ${credentials}`);
-  //     router.navigate("/TodoPage");
-  //   } catch (error) {
-  //     console.log(`Error ${JSON.stringify(error)}`);
-  //     setError(error);
-  //   }
-  // };
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      backgroundColor: "#39d896",
-    },
-    inputStyles: {
-      borderWidth: 1,
-      borderColor: "#ccc",
-      paddingVertical: 12,
-      paddingHorizontal: 20,
-      marginBottom: 20,
-      width: "100%",
-      borderRadius: 12,
-      backgroundColor: "#FFF",
-    },
-    buttonStyles: {
-      paddingVertical: 12,
-      paddingHorizontal: 20,
-      marginBottom: 20,
-      width: "100%",
-      borderRadius: 12,
-      backgroundColor: "#5E8B7E",
-    },
-    buttonText: {
-      color: "#FFF",
-      textAlign: "center",
-    },
-  });
+  const handleLogin = async () => {
+    try {
+      const credentials = await login(email, password);
+      console.log(`credentials ${credentials}`);
+      router.navigate("/");
+    } catch (error) {
+      console.log(`Error ${JSON.stringify(error)}`);
+      setError(error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -66,12 +35,7 @@ const Login = () => {
           secureTextEntry
           style={styles.inputStyles}
         />
-        <Pressable
-          onPress={() => {
-            console.log("login");
-          }}
-          style={styles.buttonStyles}
-        >
+        <Pressable onPress={handleLogin} style={styles.buttonStyles}>
           <Text style={styles.buttonText}>Login</Text>
         </Pressable>
         {error ? (
@@ -84,8 +48,7 @@ const Login = () => {
               textAlign: "center",
             }}
           >
-            {" "}
-            {error.code}{" "}
+            {error.code}
           </Text>
         ) : null}
       </View>
@@ -98,8 +61,7 @@ const Login = () => {
               marginTop: 10,
             }}
           >
-            {" "}
-            Register{" "}
+            Register
           </Text>
         </Pressable>
         <Pressable onPress={() => router.replace("/account/reset")}>
@@ -119,3 +81,34 @@ const Login = () => {
 };
 
 export default Login;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#39d896",
+  },
+  inputStyles: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    marginBottom: 20,
+    width: "100%",
+    borderRadius: 12,
+    backgroundColor: "#FFF",
+  },
+  buttonStyles: {
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    marginBottom: 20,
+    width: "100%",
+    borderRadius: 12,
+    backgroundColor: "#5E8B7E",
+  },
+  buttonText: {
+    color: "#FFF",
+    textAlign: "center",
+  },
+});
