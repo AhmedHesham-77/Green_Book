@@ -9,13 +9,15 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@expo/vector-icons": "^14.0.1",
-    "@react-navigation/bottom-tabs": "^6.5.20",
+    "@react-native-async-storage/async-storage": "^1.23.1",
     "expo": "~50.0.17",
     "expo-constants": "~15.4.6",
+    "expo-font": "~11.10.3",
+    "expo-linear-gradient": "~12.7.2",
     "expo-linking": "~6.2.2",
     "expo-router": "~3.4.10",
     "expo-status-bar": "~1.11.1",
+    "firebase": "10.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.73.6",
