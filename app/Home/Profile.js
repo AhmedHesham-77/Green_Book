@@ -1,8 +1,8 @@
-import { View , Text } from 'react-native';
-export default function Profile () {
+import {View, Text} from 'react-native';
+import MyProfile from '../../Componenet/Profile/MyProfile';
+
+export default function Profile() {
     return (
-        <View>
-            <Text> About Page </Text>
-        </View>
+        <MyProfile/>
     );
 };

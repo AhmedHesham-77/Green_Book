@@ -1,8 +1,8 @@
-import { View , Text } from 'react-native';
+import {View, Text} from 'react-native';
+import MyHome from '../../Componenet/Home/MyHome'
 
-export default function Index () {
+export default function Index() {
     return (
-        <View>
-        </View>
+        <MyHome/>
     );
 };

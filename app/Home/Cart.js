@@ -1,8 +1,8 @@
-import { View , Text } from 'react-native';
+import {View, Text} from 'react-native';
+import MyCart from '../../Componenet/Cart/MyCart';
 
-export default function Cart () {
+export default function Cart() {
     return (
-        <View>
-        </View>
+        <MyCart/>
     );
 };
