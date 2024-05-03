@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import MyButton from "../MyButton";
+import MyButton from "./MyButton";
 import {View, Text, StyleSheet, TextInput, Pressable} from 'react-native';
 
 export default function SearchBar({onPress}) {

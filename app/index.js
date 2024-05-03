@@ -1,4 +1,4 @@
-import Home from "../screens/Home";
+import GetStarted from "../screens/GetStarted";
 export default function index() {
-  return <Home />;
+  return <GetStarted />;
 }

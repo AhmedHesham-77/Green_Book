@@ -12,7 +12,7 @@ const Login = () => {
     try {
       const credentials = await login(email, password);
       console.log(`credentials ${credentials}`);
-      router.navigate("/");
+      router.navigate("(tabs)");
     } catch (error) {
       console.log(`Error ${JSON.stringify(error)}`);
       setError(error);

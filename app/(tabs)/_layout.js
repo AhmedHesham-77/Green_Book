@@ -9,18 +9,20 @@ export default function TabsLayout() {
         <Tabs screenOptions={{tabBarActiveTintColor: 'green', tabBarInactiveTintColor: 'blue'}}>
             <Tabs.Screen name='index' options={{
                 headerShown: false,
-                headerTitle: 'Home',
-                title: 'Home',
+                headerTitle: 'GetStarted',
+                title: '',
                 tabBarIcon: ({color}) => <FontAwesome size={36} name="home" color={color}/>,
             }}/>
-            <Tabs.Screen name='Cart' options={{
+            <Tabs.Screen name='cart' options={{
+                headerShown:false,
                 headerTitle: 'MyCart',
-                title: 'MyCart',
+                title: '',
                 tabBarIcon: ({color}) => <Feather name="shopping-cart" size={30} color={color}/>
             }}/>
-            <Tabs.Screen name='Profile' options={{
+            <Tabs.Screen name='profile' options={{
+                headerShown:false,
                 headerTitle: 'Profile',
-                title: 'Profile',
+                title: '',
                 tabBarIcon: ({color}) => <Ionicons name="person-circle" size={36} color={color}/>,
 
             }}/>
