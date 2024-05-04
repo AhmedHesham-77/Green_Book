@@ -7,6 +7,7 @@ import {
     deleteDoc,
     collection,
     query,
+    getDoc,
     where,
     onSnapshot,
 } from "firebase/firestore";
@@ -20,6 +21,20 @@ async function getProducts() {
         return {id: doc.id, ...doc.data()};
     });
     return productList;
+}
+
+async function getProduct(id) {
+    const docRef = doc(db, `products`, id);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+        return {id: id, ...docSnap.data()};
+    }
+
+    // docSnap.data() will be undefined in this case
+    console.log("No such document!");
+    return undefined
 }
 
 
@@ -68,5 +83,6 @@ export {
     addProduct,
     editProduct,
     deleteProduct,
+    getProduct,
     // subscribe
 };
