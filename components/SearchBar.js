@@ -1,6 +1,6 @@
 import React, {useState} from "react";
-import MyButton from "./MyButton";
-import {View, Text, StyleSheet, TextInput, Pressable} from 'react-native';
+import {View, StyleSheet, TextInput} from 'react-native';
+import Button from "./Button";
 
 export default function SearchBar({onPress}) {
     const [searchText, setSearchText] = useState("");
@@ -15,9 +15,14 @@ export default function SearchBar({onPress}) {
                     console.log(text);
                 }}
             />
-            <MyButton style={styles.button} onPress={onPress}>
-                <Text>search</Text>
-            </MyButton>
+            <Button
+                title={"search"}
+                textColor="black"
+                onPress={onPress}
+                styles={styles.button}
+            />
+
+
         </View>
     );
 };
@@ -26,16 +31,24 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: "row",
+        height: "100%",
     }
     , input: {
         backgroundColor: "white",
-        fontSize: 32,
-        height: "20%",
-        width: "80%"
+        fontSize: 28,
+        width: "80%",
+        paddingHorizontal: 5,
+
 
     }, button: {
         fontSize: 32,
-        height: "20%",
+        justifyContent: "center",
+        alignItems: "center",
+        borderWidth: 1,
+        backgroundColor: "green",
+        width: "20%",
+        minWidth: 70,
+        maxWidth: 100
 
     }
 });
