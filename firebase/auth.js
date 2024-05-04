@@ -29,9 +29,6 @@ async function register (username , email , phone , password) {
     phone: phone,
 	});
 
-  const userRef = doc(db , 'users' , auth.currentUser.uid);
-  const cartRef = collection(userRef , 'cart');
-  const newCart = await addDoc(cartRef , {});
 	return credentials; // return some 'credentials' of the created user.
 };
 
