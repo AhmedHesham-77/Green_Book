@@ -1,20 +1,32 @@
-import {View, Text, StyleSheet, StatusBar, Pressable, SafeAreaView, Button} from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    StatusBar,
+    Pressable,
+    SafeAreaView,
+    ActivityIndicator,
+    Button,
+    FlatList
+} from 'react-native';
 import {FontAwesome} from '@expo/vector-icons';
 import {useState, useEffect} from "react";
 import SearchBar from "../components/SearchBar";
 import AddProduct from "../components/AddProduct";
-import {getProducts} from "../firebase/products";
+import {getProducts, getProduct} from "../firebase/products";
+import Product from "../components/Product";
+import {router} from "expo-router";
+import Loading from "../components/Loading";
 
 export default function Home() {
     const [searchButton, setSearchButton] = useState(false);
     const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loaded, setLoaded] = useState(false);
 
     const getAllProducts = async () => {
-        setLoading(true);
         const newProducts = await getProducts();
         setProducts(newProducts);
-        setLoading(false);
+        setLoaded(true);
     }
     useEffect(() => {
         getAllProducts();
@@ -32,16 +44,29 @@ export default function Home() {
                 {searchButton && <SearchBar onPress={() => console.log('searching')}/>}
             </View>
             <View style={styles.container2}>
-                <Text style={styles.title}>
-                    Home To Be edited.
-                </Text>
+
+                {!loaded ? (
+                    <Loading/>
+                ) : (
+                    <FlatList
+                        style={styles.list}
+                        data={products}
+                        renderItem={({item}) => (
+                            < Product
+                                product={item}
+
+                            />
+                        )
+                        }
+                    />
+                )}
                 <AddProduct/>
 
             </View>
             {/*should be removed it is just for test */}
 
-            <Button title={"print data"} onPress={() => {
-                console.log(products)
+            <Button title={"print data"} onPress={async () => {
+                console.log(await getProduct("46DrWBg2ygLlzr7fVauL"));
             }}/>
             <StatusBar style="auto"/>
         </SafeAreaView>
@@ -70,6 +95,10 @@ const styles = StyleSheet.create({
         width: "100%",
 
         flexDirection: "row",
+
+    },
+    list: {
+        width: "80%",
 
     }
 
