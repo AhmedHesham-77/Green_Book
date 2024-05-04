@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { View, TextInput, Pressable, Text, StyleSheet } from "react-native";
 import { router } from "expo-router";
 import { login } from "../firebase/auth";
+import { Ionicons } from '@expo/vector-icons';
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
   const handleLogin = async () => {
@@ -32,9 +34,12 @@ const Login = () => {
           placeholder="Password"
           value={password}
           onChangeText={setPassword}
-          secureTextEntry
+          secureTextEntry = {!showPassword}
           style={styles.inputStyles}
         />
+        <Pressable onPress = {() => { setShowPassword(!showPassword); }} style={{ padding: 10 }}>
+              <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={24} color="black" />
+        </Pressable>
         <Pressable onPress={handleLogin} style={styles.buttonStyles}>
           <Text style={styles.buttonText}>Login</Text>
         </Pressable>

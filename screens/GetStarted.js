@@ -9,7 +9,9 @@ export default function GetStarted() {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-        colors={["#39d896", "#36d493", "#1a9663"]}
+        colors={['rgb(250, 250, 250)', 'rgb(225, 234, 238)']}
+        start={{ x: 0.187, y: 0.378 }}
+        end={{ x: 1, y: 1 }}
         style={styles.linearGradient}
       >
         <Text style={styles.subtitle}>Welcome to</Text>

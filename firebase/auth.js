@@ -1,4 +1,4 @@
-import { auth } from "./config";
+import { db , auth } from "./config";
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
@@ -9,6 +9,8 @@ import {
   FacebookAuthProvider,
   signOut,
 } from "firebase/auth";
+import { addDoc, collection, doc , setDoc } from 'firebase/firestore';
+
 onAuthStateChanged(auth, (user) => {
   if (user != null) {
     console.log("We are authenticated now!");
@@ -19,10 +21,19 @@ async function isSignedIn() {
   return (await authentication.currentUser) != null;
 }
 
-async function register(email, password) {
-  const cred = await createUserWithEmailAndPassword(auth, email, password);
-  return cred;
-}
+async function register (username , email , phone , password) {
+	const credentials = await createUserWithEmailAndPassword(auth , email , password , username , phone);
+	await setDoc(doc(db , 'users' , auth.currentUser.uid) , {
+		name: username,
+		email: email,
+    phone: phone,
+	});
+
+  const userRef = doc(db , 'users' , auth.currentUser.uid);
+  const cartRef = collection(userRef , 'cart');
+  const newCart = await addDoc(cartRef , {});
+	return credentials; // return some 'credentials' of the created user.
+};
 
 async function login(email, password) {
   await signInWithEmailAndPassword(auth, email, password);
