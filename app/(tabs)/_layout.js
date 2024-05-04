@@ -26,6 +26,13 @@ export default function TabsLayout() {
                 tabBarIcon: ({color}) => <Ionicons name="person-circle" size={36} color={color}/>,
 
             }}/>
+            <Tabs.Screen name='product/index' options={{
+                headerShown:false,
+                headerTitle: 'Profile',
+                title: '',
+                href:null,
+                tabBarIcon: ({color}) => <Ionicons name="person-circle" size={36} color={color}/>,
+            }}/>
         </Tabs>
     );
 };

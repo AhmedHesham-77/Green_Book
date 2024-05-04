@@ -2,14 +2,13 @@ import {View, Text, StyleSheet, StatusBar, Pressable, SafeAreaView} from 'react-
 import {FontAwesome} from '@expo/vector-icons';
 import {useState} from "react";
 import SearchBar from "../components/SearchBar";
+import AddProduct from "../components/AddProduct";
 
 export default function Home() {
     const [searchButton, setSearchButton] = useState(false);
 
     return (
         <SafeAreaView style={styles.container}>
-            {/*<View style={styles.container}>*/}
-
             <View style={styles.searchbar}>
                 <Pressable style={styles.search} onPress={() => {
                     setSearchButton(!searchButton);
@@ -24,9 +23,8 @@ export default function Home() {
                     Home To Be edited.
                 </Text>
             </View>
-            <StatusBar style="blue"/>
-
-            {/*</View>*/}
+            <AddProduct/>
+            <StatusBar style="auto"/>
         </SafeAreaView>
     );
 };
