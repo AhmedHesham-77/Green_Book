@@ -22,8 +22,9 @@ export default function Home() {
                 <Text style={styles.title}>
                     Home To Be edited.
                 </Text>
+                <AddProduct/>
+
             </View>
-            <AddProduct/>
             <StatusBar style="auto"/>
         </SafeAreaView>
     );

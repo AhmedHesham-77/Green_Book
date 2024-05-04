@@ -2,12 +2,9 @@ import React, {useState} from "react";
 import {
     View,
     TextInput,
-    Pressable,
     Text,
     StyleSheet,
-    Image,
 } from "react-native";
-import {router} from "expo-router";
 import Button from "../components/Button";
 
 const AddProduct = () => {
@@ -19,6 +16,34 @@ const AddProduct = () => {
     const [error, setError] = useState("");
 
     const handleAddProduct = async () => {
+        if (!productName) {
+            setError("Please enter product name");
+        } else if (!/^[a-zA-Z]/.test(productName)) {
+            setError("Product name must start with a letter");
+        } else if (productName.length < 6) {
+            setError("Product name must be at least 6 characters");
+        } else if (!productQuantity) {
+            setError("Please enter quantity");
+
+        } else if (productQuantity < 0) {
+            setError("quantity should be greater than 0");
+        } else if (price < 0) {
+            setError("Price should be greater than 0");
+        }
+            // else if (!productImage) {
+            //     setError("Please add image to your product");
+            //
+        // }
+        else {
+            try {
+                //push into firestore
+
+            } catch (err) {
+                console.log(err);
+            }
+        }
+
+
     };
 
     return (
@@ -70,7 +95,7 @@ const AddProduct = () => {
                     },
                 ]}
             />
-            {error ? <Text style={styles.error}>{error.code}</Text> : null}
+            {error ? <Text style={styles.error}>{error}</Text> : null}
         </View>
     );
 };
@@ -90,11 +115,7 @@ const styles = StyleSheet.create({
         color: "#28803d",
         marginBottom: 20,
     },
-    logoText: {
-        color: "#FFF",
-        fontSize: 40,
-        fontWeight: "bold",
-    },
+
     input: {
         borderWidth: 1,
         borderColor: "#ccc",
@@ -105,27 +126,7 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         backgroundColor: "#FFF",
     },
-    passwordInput: {
-        flexDirection: "row",
-        alignItems: "center",
-        width: "80%",
-        marginBottom: 20,
-    },
-    password: {
-        flex: 1,
-        borderWidth: 1,
-        borderColor: "#ccc",
-        paddingVertical: 12,
-        paddingHorizontal: 20,
-        borderRadius: 12,
-        backgroundColor: "#FFF",
-    },
-    togglePassword: {
-        position: "absolute",
-        right: 10,
-        top: "50%",
-        transform: [{translateY: -12}],
-    },
+
     button: {
         paddingVertical: 12,
         paddingHorizontal: 20,
@@ -138,11 +139,7 @@ const styles = StyleSheet.create({
         color: "#FFF",
         textAlign: "center",
     },
-    link: {
-        color: "#a4ed80",
-        textDecorationLine: "underline",
-        marginTop: 10,
-    },
+
     error: {
         color: "red",
         marginTop: 10,
@@ -150,14 +147,14 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         textAlign: "center",
     },
-    description:{
+    description: {
         borderWidth: 1,
         borderColor: "#ccc",
         paddingVertical: 12,
         paddingHorizontal: 20,
         marginBottom: 20,
         width: "80%",
-        height:150,
+        height: 150,
         borderRadius: 12,
         backgroundColor: "#FFF",
     }

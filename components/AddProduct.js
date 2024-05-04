@@ -6,9 +6,9 @@ export default function AddProduct() {
     return (
         <View style={styles.container}>
             <Button
-                title={"search"}
+                title={"Add product"}
                 textColor="black"
-                onPress={()=>router.navigate("(tabs)/product")}
+                onPress={() => router.navigate("(tabs)/product")}
                 styles={styles.button}
             />
         </View>
@@ -17,9 +17,7 @@ export default function AddProduct() {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         flexDirection: "row",
-        height: "100%",
     }
     , input: {
         backgroundColor: "white",
@@ -34,9 +32,9 @@ const styles = StyleSheet.create({
         alignItems: "center",
         borderWidth: 1,
         backgroundColor: "green",
-        width: "20%",
-        minWidth: 70,
-        maxWidth: 100
+        // width: "20%",
+        // minWidth: 70,
+        // maxWidth: 100
 
     }
 });
