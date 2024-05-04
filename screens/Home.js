@@ -1,12 +1,25 @@
-import {View, Text, StyleSheet, StatusBar, Pressable, SafeAreaView} from 'react-native';
+import {View, Text, StyleSheet, StatusBar, Pressable, SafeAreaView, Button} from 'react-native';
 import {FontAwesome} from '@expo/vector-icons';
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import SearchBar from "../components/SearchBar";
 import AddProduct from "../components/AddProduct";
+import {getProducts} from "../firebase/products";
 
 export default function Home() {
     const [searchButton, setSearchButton] = useState(false);
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(false);
 
+    const getAllProducts = async () => {
+        setLoading(true);
+        const newProducts = await getProducts();
+        setProducts(newProducts);
+        setLoading(false);
+    }
+    useEffect(() => {
+        getAllProducts();
+
+    }, []);
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.searchbar}>
@@ -25,6 +38,11 @@ export default function Home() {
                 <AddProduct/>
 
             </View>
+            {/*should be removed it is just for test */}
+
+            <Button title={"print data"} onPress={() => {
+                console.log(products)
+            }}/>
             <StatusBar style="auto"/>
         </SafeAreaView>
     );

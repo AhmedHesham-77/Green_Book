@@ -6,6 +6,7 @@ import {
     StyleSheet,
 } from "react-native";
 import Button from "../components/Button";
+import {addProduct} from "../firebase/products";
 
 const AddProduct = () => {
     const [productName, setProductName] = useState("");
@@ -15,12 +16,19 @@ const AddProduct = () => {
     const [productQuantity, setProductQuantity] = useState("");
     const [error, setError] = useState("");
 
+    const clearData = () => {
+        setProductName("");
+        setPrice("");
+        setProductQuantity("");
+        setDescription("");
+    }
     const handleAddProduct = async () => {
+        setError("");
         if (!productName) {
             setError("Please enter product name");
         } else if (!/^[a-zA-Z]/.test(productName)) {
             setError("Product name must start with a letter");
-        } else if (productName.length < 6) {
+        } else if (productName.length < 4) {
             setError("Product name must be at least 6 characters");
         } else if (!productQuantity) {
             setError("Please enter quantity");
@@ -36,9 +44,21 @@ const AddProduct = () => {
         // }
         else {
             try {
-                //push into firestore
+                const product = {
+                    productName: productName,
+                    price: price,
+                    Quantity: productQuantity,
+                    description: description
+                };
+                const ref = await addProduct(product);
+                if (!ref) {
+                    throw Error("could not add product");
+                }
+                alert("Product added successfully.");
+                clearData();
 
             } catch (err) {
+                setError(err.message);
                 console.log(err);
             }
         }
@@ -95,6 +115,28 @@ const AddProduct = () => {
                     },
                 ]}
             />
+            <Button
+                title="Clear"
+                textColor="white"
+                onPress={clearData}
+                styles={({pressed}) => [
+                    {opacity: pressed ? 0.2 : 1},
+                    {
+                        justifyContent: "center",
+                        alignItems: "center",
+                        borderWidth: 1,
+                        borderColor: "#a4ed80",
+                        paddingVertical: 12,
+                        paddingHorizontal: 20,
+                        marginTop: 30,
+                        marginBottom: 20,
+                        width: "40%",
+                        borderRadius: 10,
+                        backgroundColor: "#bd0e13",
+                    },
+                ]}
+            />
+
             {error ? <Text style={styles.error}>{error}</Text> : null}
         </View>
     );
