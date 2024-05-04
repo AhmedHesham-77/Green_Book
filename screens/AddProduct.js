@@ -8,7 +8,6 @@ import {
 import Button from "../components/Button";
 import {addProduct} from "../firebase/products";
 import {app, uploadImage} from "../firebase/config";
-import AddMedia from "../components/AddMedia";
 import * as ImagePicker from "expo-image-picker";
 
 const AddProduct = () => {
