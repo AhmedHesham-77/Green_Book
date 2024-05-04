@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, SafeAreaView, Pressable } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  Pressable,
+  Image,
+} from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
@@ -9,14 +16,14 @@ export default function GetStarted() {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-        colors={['rgb(250, 250, 250)', 'rgb(225, 234, 238)']}
+        colors={["#96df71", "#5dc87f", "#3da35d"]}
         start={{ x: 0.187, y: 0.378 }}
         end={{ x: 1, y: 1 }}
         style={styles.linearGradient}
       >
-        <Text style={styles.subtitle}>Welcome to</Text>
+        <Image source={require("../assets/greenlogo.png")} />
         <Text style={styles.title}>GreenBook</Text>
-        <Text style={styles.subtitle}>your best book store</Text>
+        <Text style={styles.subtitle}>Your best book store</Text>
         <Button
           title="GET STARTED"
           textColor="white"
@@ -29,14 +36,14 @@ export default function GetStarted() {
               justifyContent: "center",
               alignItems: "center",
               borderWidth: 1,
-              borderColor: "#ccc",
+              borderColor: "#a4ed80",
               paddingVertical: 12,
               paddingHorizontal: 20,
               marginTop: 30,
               marginBottom: 20,
               width: "100%",
-              borderRadius: 5,
-              backgroundColor: "#1c2e44",
+              borderRadius: 2,
+              backgroundColor: "#246c3a",
             },
           ]}
         />

@@ -3,13 +3,14 @@ import React, { useState } from "react";
 import {
   View,
   TextInput,
-  Button,
   Text,
   Pressable,
   StyleSheet,
   Alert,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import { reset } from "../firebase/auth";
+import Button from "../components/Button";
 
 const ForgetPassword = () => {
   const [email, setEmail] = useState("");
@@ -28,7 +29,12 @@ const ForgetPassword = () => {
   };
 
   return (
-    <View style={[styles.container, styles.nightMode]}>
+    <LinearGradient
+      colors={["#96df71", "#5dc87f", "#3da35d"]}
+      start={{ x: 0.187, y: 0.378 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.container}
+    >
       <Text style={[styles.title]}>Forget Password</Text>
       <TextInput
         placeholder="Email"
@@ -38,9 +44,24 @@ const ForgetPassword = () => {
       />
       <Button
         title="Reset"
+        textColor="white"
         onPress={handlePress}
-        color="#FF276C"
-        style={styles.resetButton}
+        styles={({ pressed }) => [
+          { opacity: pressed ? 0.2 : 1 },
+          {
+            justifyContent: "center",
+            alignItems: "center",
+            borderWidth: 1,
+            borderColor: "#a4ed80",
+            paddingVertical: 12,
+            paddingHorizontal: 20,
+            marginTop: 30,
+            marginBottom: 20,
+            width: "100%",
+            borderRadius: 10,
+            backgroundColor: "#246c3a",
+          },
+        ]}
       />
       <View style={styles.buttonContainer}>
         <Pressable
@@ -57,7 +78,7 @@ const ForgetPassword = () => {
         </Pressable>
       </View>
       {error ? <Text style={[styles.error]}>{error}</Text> : null}
-    </View>
+    </LinearGradient>
   );
 };
 
@@ -66,7 +87,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#39d896",
     paddingHorizontal: 30,
   },
   input: {
@@ -80,28 +100,26 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   link: {
-    color: "#5E8B7E",
+    color: "#a4ed80",
     textDecorationLine: "underline",
   },
-  nightMode: {
-    backgroundColor: "#39d896",
-  },
   title: {
-    fontSize: 24,
+    fontFamily: "Gabarito,cursive",
+    fontSize: 45,
     fontWeight: "bold",
+    color: "#ffffff",
     marginBottom: 20,
-    color: "#FF276C",
   },
   buttonContainer: {
     flexDirection: "row",
-    justifyContent: "center", // Center the buttons horizontally
+    justifyContent: "center",
     marginTop: 10,
   },
   button: {
-    marginHorizontal: 5, // Add margin between buttons for spacing
+    marginHorizontal: 5,
   },
   resetButton: {
-    marginTop: 10,
+    marginTop: 20,
   },
   error: {
     color: "red",
