@@ -81,8 +81,8 @@ const AddProduct = () => {
                     await uploadImageToStorage();
                     const product = {
                         productName: productName,
-                        price: price,
-                        Quantity: productQuantity,
+                        price: Number(price),
+                        Quantity: Number(productQuantity),
                         description: description,
                         ImageUrl: imageUrl.current,
                     };
@@ -115,12 +115,14 @@ const AddProduct = () => {
                     value={price}
                     onChangeText={setPrice}
                     style={styles.input}
+                    keyboardType="numeric"
                 />
                 <TextInput
                     placeholder="Enter quantity"
                     value={productQuantity}
                     onChangeText={setProductQuantity}
                     style={styles.input}
+                    keyboardType="numeric"
                 />
                 <TextInput
                     multiline
@@ -129,9 +131,7 @@ const AddProduct = () => {
                     onChangeText={setDescription}
                     style={styles.description}
                 />
-                {/*<AddMedia/>*/}
                 <Button title="Add image" onPress={pickImage}/>
-                {/*{image && <Image source={{uri: image}} style={styles.image}/>}*/}
                 <Button
                     title="Add"
                     textColor="white"

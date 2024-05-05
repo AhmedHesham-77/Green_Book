@@ -5,13 +5,14 @@ import {
     Pressable,
     Text,
     StyleSheet,
-
+    Platform
 } from "react-native";
 import {LinearGradient} from "expo-linear-gradient";
 import {router} from "expo-router";
 import {Ionicons} from "@expo/vector-icons";
 import {register} from "../firebase/auth";
 import Button from "../components/Button";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const Register = () => {
     const [username, setUsername] = useState("");
@@ -20,6 +21,45 @@ const Register = () => {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState("");
+    const [date, setDate] = useState(new Date());
+    const [showPicker, setShowPicker] = useState(false);
+    const [dateOfBirth, setDateOfBirth] = useState(new Date());
+
+    // set max year 10 years from current date
+    const currentDate = new Date();
+    const maxDate = new Date();
+    maxDate.setFullYear(currentDate.getFullYear() - 10);
+    maxDate.setDate(31);
+    maxDate.setMonth(11);
+
+    const minDate = new Date();
+    minDate.setFullYear(currentDate.getFullYear() - 70);
+    minDate.setDate(31);
+    minDate.setMonth(11);
+
+    const togglePicker = () => {
+        setShowPicker(!showPicker);
+    }
+
+    const formatDate = (date) => {
+        let nwdate = new Date(date);
+
+        let year = nwdate.getFullYear();
+        let month = nwdate.getMonth() + 1;
+        let day = nwdate.getDate();
+
+        return `${day}-${month}-${year}`;
+    }
+
+    const onChangeDate = ({type}, selectedDate) => {
+        if (type === 'set') {
+            const newDate = selectedDate;
+            setDate(newDate);
+            togglePicker();
+            setDateOfBirth(formatDate(newDate));
+        } else
+            togglePicker();
+    }
 
     const handlePress = async () => {
         const isValidUsername = /^[a-zA-Z0-9]*$/.test(username);
@@ -38,7 +78,7 @@ const Register = () => {
         } else if (!phone)
             return setError("please enter phone number");
         try {
-            const credentials = await register(username, email, phone, password);
+            const credentials = await register(username, email, phone, password, dateOfBirth);
             router.navigate("/account/login");
         } catch (error) {
             if (error.code === "auth/email-already-in-use") {
@@ -81,8 +121,24 @@ const Register = () => {
                 style={styles.input}
                 keyboardType="numeric"
             />
-
-
+            <View style={styles.input}>
+                {showPicker && (<DateTimePicker
+                    mode="date"
+                    display="spinner"
+                    value={date}
+                    onChange={onChangeDate}
+                    minimumDate={minDate}
+                    maximumDate={maxDate}
+                />)}
+                {!showPicker && (<Pressable onPress={togglePicker}>
+                    <TextInput
+                        placeholder="Date of Birth"
+                        value={dateOfBirth}
+                        editable={false}
+                        style={styles.date}
+                    />
+                </Pressable>)}
+            </View>
             <View style={styles.passwordInput}>
                 <TextInput
                     placeholder="Password"
@@ -206,4 +262,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         textAlign: "center",
     },
+    date: {
+        color: 'black'
+    }
 });
