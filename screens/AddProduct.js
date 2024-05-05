@@ -1,13 +1,13 @@
-import React, {useEffect, useState, useRef} from "react";
+import React, {useState, useRef} from "react";
 import {
     View,
     TextInput,
     Text,
-    StyleSheet, Image,
+    StyleSheet,
 } from "react-native";
 import Button from "../components/Button";
 import {addProduct} from "../firebase/products";
-import {app, uploadImage} from "../firebase/config";
+import {uploadImage} from "../firebase/config";
 import * as ImagePicker from "expo-image-picker";
 
 const AddProduct = () => {
@@ -64,12 +64,18 @@ const AddProduct = () => {
                 setError("Product name must start with a letter");
             } else if (productName.length < 4) {
                 setError("Product name must be at least 6 characters");
-            } else if (!productQuantity) {
-                setError("Please enter quantity");
-            } else if (productQuantity < 0) {
-                setError("quantity should be greater than 0");
+            } else if (!price) {
+                setError("Please enter the price name");
+            } else if (isNaN(price)) {
+                setError("Price must be a number");
             } else if (price < 0) {
                 setError("Price should be greater than 0");
+            } else if (!productQuantity) {
+                setError("Please enter quantity");
+            } else if (isNaN(productQuantity)) {
+                setError("Quantity must be a number");
+            } else if (productQuantity < 0) {
+                setError("quantity should be greater than 0");
             } else {
                 try {
                     await uploadImageToStorage();
