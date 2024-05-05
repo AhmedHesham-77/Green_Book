@@ -5,7 +5,7 @@ import {
     Pressable,
     Text,
     StyleSheet,
-    Platform
+
 } from "react-native";
 import {LinearGradient} from "expo-linear-gradient";
 import {router} from "expo-router";
@@ -15,7 +15,7 @@ import Button from "../components/Button";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 const Register = () => {
-    const [username, setUsername] = useState("");
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [password, setPassword] = useState("");
@@ -23,7 +23,7 @@ const Register = () => {
     const [error, setError] = useState("");
     const [date, setDate] = useState(new Date());
     const [showPicker, setShowPicker] = useState(false);
-    const [dateOfBirth, setDateOfBirth] = useState(new Date());
+    const [dateOfBirth, setDateOfBirth] = useState("");
     const [dateChanged, setDateChanged] = useState(false);
 
     // set max year 10 years from current date
@@ -64,7 +64,7 @@ const Register = () => {
     }
 
     const handlePress = async () => {
-        const isValidUsername = /^[a-zA-Z0-9]*$/.test(username);
+        const isValidName = /^[a-zA-Z\s]*$/.test(name)
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!email || !password) return setError("Email and password are required");
@@ -72,16 +72,16 @@ const Register = () => {
             return setError("Password must be at least 6 characters");
         else if (!emailRegex.test(email))
             return setError("Invalid email");
-        else if (!username)
-            return setError("please enter username");
-        else if (!isValidUsername) {
-            return setError("Username can only contain letters and numbers");
+        else if (!name)
+            return setError("please enter name");
+        else if (!isValidName) {
+            return setError("name can only contain letters ");
         } else if (!phone)
             return setError("please enter phone number");
         else if (!dateChanged)
             return setError("Enter your birthdate");
         try {
-            const credentials = await register(username, email, phone, password, dateOfBirth);
+            await register(name, email, phone, password, dateOfBirth);
             router.navigate("/account/login");
         } catch (error) {
             if (error.code === "auth/email-already-in-use") {
@@ -102,9 +102,9 @@ const Register = () => {
         >
             <Text style={styles.title}>Register</Text>
             <TextInput
-                placeholder="Username"
-                value={username}
-                onChangeText={setUsername}
+                placeholder="name"
+                value={name}
+                onChangeText={setName}
                 style={styles.input}
             />
             <TextInput

@@ -1,11 +1,10 @@
 import {
     View,
-    Text,
+
     StyleSheet,
     StatusBar,
     Pressable,
     SafeAreaView,
-    ActivityIndicator,
     Button,
     FlatList
 } from 'react-native';
@@ -13,15 +12,20 @@ import {FontAwesome} from '@expo/vector-icons';
 import {useState, useEffect} from "react";
 import SearchBar from "../components/SearchBar";
 import AddProduct from "../components/AddProduct";
-import {getProducts, getProduct} from "../firebase/products";
+import {getProducts} from "../firebase/products";
 import Product from "../components/Product";
 import {router} from "expo-router";
 import Loading from "../components/Loading";
+import {logout} from "../firebase/auth";
 
 export default function Home() {
     const [searchButton, setSearchButton] = useState(false);
     const [products, setProducts] = useState([]);
     const [loaded, setLoaded] = useState(false);
+    const handleLogout = async () => {
+        await logout();
+        router.navigate("/account/login");
+    };
 
     const getAllProducts = async () => {
         const newProducts = await getProducts();
@@ -65,8 +69,8 @@ export default function Home() {
             </View>
             {/*should be removed it is just for test */}
 
-            <Button title={"print data"} onPress={async () => {
-                console.log(await getProduct("46DrWBg2ygLlzr7fVauL"));
+            <Button title={"log out"} onPress={async () => {
+                handleLogout();
             }}/>
             <StatusBar style="auto"/>
         </SafeAreaView>

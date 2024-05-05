@@ -4,7 +4,7 @@ import {AntDesign} from '@expo/vector-icons';
 import {logout} from '../firebase/auth';
 import {router} from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {getUserByEmail, updateUser} from '../firebase/users';
+import {getUser, updateUser} from '../firebase/users';
 import Loading from '../components/Loading';
 import {LinearGradient} from 'expo-linear-gradient';
 import Dialog from "react-native-dialog";
@@ -35,10 +35,12 @@ export default function Profile() {
         const fetchData = async () => {
             try {
                 const user = await AsyncStorage.getItem('user');
-                const userEmail = JSON.parse(user).email;
-                const userData = await getUserByEmail(userEmail);
+                const userId = JSON.parse(user).uid;
+
+                const userData = await getUser(userId);
                 setUserData(userData);
                 setName(userData.name);
+
                 setPhone(userData.phone);
             } catch (error) {
                 console.log(error);
@@ -52,14 +54,16 @@ export default function Profile() {
         router.navigate("/account/login");
     };
 
+
     const handleUpdate = async () => {
 
 
-        const isValidUsername = /^[a-zA-Z0-9]*$/.test(name);
+        const isValidName = /^[a-zA-Z\s]*$/.test(name)
         if (!name)
-            return setError("please enter username");
-        else if (!isValidUsername) {
-            return setError("Username can only contain letters and numbers");
+            return setError("please enter name");
+
+        else if (!isValidName) {
+            return setError("name can only contain letters ");
 
         } else if (!phone)
             return setError("please enter phone number");
@@ -122,10 +126,10 @@ export default function Profile() {
                 </Pressable>
 
                 <Dialog.Container visible={visible}>
-                    <Dialog.Title> Edit your username and password </Dialog.Title>
+                    <Dialog.Title> Edit your name and password </Dialog.Title>
                     <Dialog.Description> Do you want to edit this account? You cannot undo this
                         action. </Dialog.Description>
-                    <Dialog.Input value={name} onChangeText={setName} placeholder='Enter your new username'/>
+                    <Dialog.Input value={name} onChangeText={setName} placeholder='Enter your new name'/>
                     <Dialog.Input value={phone} onChangeText={setPhone} placeholder='Enter your new phone'/>
                     <Dialog.Button label='CANCEL' onPress={handleCancel}/>
                     <Dialog.Button label='EDIT' onPress={handleUpdate}
