@@ -7,7 +7,7 @@ import Button from "../components/Button";
 export default function Product({id}) {
     const [product, setProduct] = useState();
     const [loaded, setLoaded] = useState(false);
-    const myId = id.id;
+    const myId = id;
     const getProductById = async () => {
         setLoaded(false);
         const p = await getProduct(myId);

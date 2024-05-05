@@ -7,6 +7,6 @@ export default function Page() {
 
 
     return (
-        <Product id={{id}}/>
+        <Product id={id}/>
     );
 }

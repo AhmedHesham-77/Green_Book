@@ -72,13 +72,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: "Gabarito,cursive",
-    fontSize: 64,
+    fontSize: 52,
     fontWeight: "bold",
     color: "#ffffff",
   },
   subtitle: {
     fontFamily: "Gabarito,cursive",
-
     fontSize: 22,
     color: "#1c2e44",
   },
