@@ -5,8 +5,7 @@ import {View} from "react-native";
 export default function TabsLayout() {
     return (
 
-
-        <Tabs screenOptions={{tabBarActiveTintColor: 'green', tabBarInactiveTintColor: 'blue'}}>
+        <Tabs screenOptions={{tabBarActiveTintColor: '#81B622', tabBarInactiveTintColor: 'black'}}>
             <Tabs.Screen name='index' options={{
                 headerShown: false,
                 headerTitle: 'GetStarted',
