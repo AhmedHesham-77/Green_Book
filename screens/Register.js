@@ -24,6 +24,7 @@ const Register = () => {
     const [date, setDate] = useState(new Date());
     const [showPicker, setShowPicker] = useState(false);
     const [dateOfBirth, setDateOfBirth] = useState(new Date());
+    const [dateChanged, setDateChanged] = useState(false);
 
     // set max year 10 years from current date
     const currentDate = new Date();
@@ -57,6 +58,7 @@ const Register = () => {
             setDate(newDate);
             togglePicker();
             setDateOfBirth(formatDate(newDate));
+            setDateChanged(true)
         } else
             togglePicker();
     }
@@ -74,9 +76,10 @@ const Register = () => {
             return setError("please enter username");
         else if (!isValidUsername) {
             return setError("Username can only contain letters and numbers");
-
         } else if (!phone)
             return setError("please enter phone number");
+        else if (!dateChanged)
+            return setError("Enter your birthdate");
         try {
             const credentials = await register(username, email, phone, password, dateOfBirth);
             router.navigate("/account/login");
