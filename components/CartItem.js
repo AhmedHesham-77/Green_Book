@@ -6,30 +6,15 @@ import { addToCart, deleteFromCart } from "../firebase/cart";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {getUserByEmail} from "../firebase/users";
 
-export default function Product({product}) {
-
-    const [uid , setUid] = useState('');
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const user = await AsyncStorage.getItem('user');
-                const userUid = JSON.parse(user).uid;
-                setUid(userUid);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        fetchData();
-    }, []);
+export default function CartItem ({ product , onDelete }) {
 
     return (
         <Pressable onPress={() => router.navigate(`product/${product.id}`)} style={styles.container}>
             <Image source={require('../assets/favicon.png')} style={styles.image}/>
             <Text style={styles.text}>{product.productName}</Text>
             <Text style={styles.text}>{product.price}</Text>
-            <Button styles={styles.addToCart} title={"addToCart"} onPress={() => {
-                addToCart(uid , product);
+            <Button styles={styles.deleteFromCart} title={"DeleteFromCart"} onPress={() => {
+                onDelete();
             }}/>
         </Pressable>
     );
@@ -48,14 +33,6 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 40,
-    },
-    addToCart: {
-        backgroundColor: "white",
-        paddingHorizontal: 5,
-        paddingVertical: 5,
-        fontSize: 20,
-        justifyContent: "center"
-
     },
     deleteFromCart: {
         backgroundColor: "red",

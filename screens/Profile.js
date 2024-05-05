@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUserByEmail , updateUser } from '../firebase/users';
 import Loading from '../components/Loading';
 import { LinearGradient } from 'expo-linear-gradient';
-import Dialog from "react-native-dialog";
+// import Dialog from "react-native-dialog";
 
 export default function Profile () {
 
@@ -97,14 +97,14 @@ export default function Profile () {
 					<Text style = {styles.buttonText}> EDIT Profile </Text>
 				</Pressable>
 
-				<Dialog.Container visible = {visible}>
+				{/* <Dialog.Container visible = {visible}>
 					<Dialog.Title> Edit your username and password </Dialog.Title>
 					<Dialog.Description> Do you want to edit this account? You cannot undo this action. </Dialog.Description>
 					<Dialog.Input value = {name} onChangeText = {setName} placeholder = 'Enter your new username' />
 					<Dialog.Input value = {phone} onChangeText = {setPhone} placeholder = 'Enter your new phone' />
 					<Dialog.Button label = 'CANCEL' onPress = {handleCancel} />
 					<Dialog.Button label = 'EDIT' onPress = {handleEdit} style = {{ backgroundColor: 'green' , color: 'white' }} />
-				</Dialog.Container>
+				</Dialog.Container> */}
 
 
 
