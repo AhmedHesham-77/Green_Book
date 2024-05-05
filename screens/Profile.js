@@ -74,6 +74,8 @@ export default function Profile() {
             Alert.alert("successfully updated");
         } catch (error) {
             console.log(error);
+            setError(error.message);
+
         }
     };
 
