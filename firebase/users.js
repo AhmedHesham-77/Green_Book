@@ -41,4 +41,11 @@ async function updateUser(uid, user) {
     });
 }
 
-export {getUserByEmail, getUser, updateUser};
+async function updateUserImage(uid, image) {
+    const usersColumn = doc(db, "users", uid);
+    await updateDoc(usersColumn, {
+        profile_image: image
+    });
+}
+
+export {getUserByEmail, getUser, updateUser, updateUserImage};
