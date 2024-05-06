@@ -1,109 +1,96 @@
+import React, { useState, useEffect, useCallback } from 'react';
 import {
-    View,
-
     StyleSheet,
-    StatusBar,
-    Pressable,
     SafeAreaView,
-    Button,
-    FlatList
+    View,
+    StatusBar,
+    FlatList,
+    useWindowDimensions,
+    Platform,
+    Dimensions, Pressable
 } from 'react-native';
-import {FontAwesome} from '@expo/vector-icons';
-import {useState, useEffect} from "react";
-import SearchBar from "../components/SearchBar";
-import AddProduct from "../components/AddProduct";
-import {getProducts} from "../firebase/products";
-import Product from "../components/Product";
-import {router} from "expo-router";
-import Loading from "../components/Loading";
-import {logout} from "../firebase/auth";
+import { getProducts } from '../firebase/products';
+import { logout } from '../firebase/auth';
+import Loading from '../components/Loading';
+import ProductCard from '../components/ProductCard';
+import {FontAwesome} from "@expo/vector-icons";
+import {SearchBar} from "react-native-screens";
 
-export default function Home() {
-    const [searchButton, setSearchButton] = useState(false);
+const Home = () => {
     const [products, setProducts] = useState([]);
     const [loaded, setLoaded] = useState(false);
+    const windowWidth = useWindowDimensions().width;
+    const [keyForForceUpdate, setKeyForForceUpdate] = useState(0);
+    const [searchButton , setSearchButton] = useState(false);
+
     const handleLogout = async () => {
         await logout();
-        router.navigate("/account/login");
+        // Assuming router is properly configured
+        // router.navigate('/account/login');
     };
 
     const getAllProducts = async () => {
         const newProducts = await getProducts();
         setProducts(newProducts);
         setLoaded(true);
-    }
+    };
+
     useEffect(() => {
         getAllProducts();
-
     }, []);
-    return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.searchbar}>
-                <Pressable style={styles.search} onPress={() => {
-                    setSearchButton(!searchButton);
-                }}>
-                    <FontAwesome name="search" size={24} color="black"></FontAwesome>
-                </Pressable>
 
-                {searchButton && <SearchBar onPress={() => console.log('searching')}/>}
-            </View>
-            <View style={styles.container2}>
+    const handleScreenResize = useCallback(() => {
+        setKeyForForceUpdate((prevKey) => prevKey + 1);
+    }, []);
 
-                {!loaded ? (
-                    <Loading/>
-                ) : (
-                    <FlatList
-                        style={styles.list}
-                        data={products}
-                        renderItem={({item}) => (
-                            < Product
-                                product={item}
+    useEffect(() => {
+        // Listen for screen size changes
+        Dimensions.addEventListener('change', handleScreenResize);
+        return () => {
+            // Clean up the event listener
+            Dimensions.removeEventListener('change', handleScreenResize);
+        };
+    }, [handleScreenResize]);
 
-                            />
-                        )
-                        }
-                    />
-                )}
-                <AddProduct/>
+    if (!loaded) {
+        return <Loading />;
+    } else {
+        const numColumns = Math.floor(windowWidth / 150);
+        return (
+            <SafeAreaView style={styles.container}>
 
-            </View>
-            {/*should be removed it is just for test */}
+                <View style = {styles.searchBar}>
+                    <Pressable style = {styles.search} onPress={() => { setSearchButton(!searchButton); }}>
+                        <FontAwesome name = 'search' size = {25} color = 'green' />
+                    </Pressable>
+                    {searchButton && <SearchBar onPress={() => console.log('searching')}/>}
+                </View>
 
-            <Button title={"log out"} onPress={async () => {
-                handleLogout();
-            }}/>
-            <StatusBar style="auto"/>
-        </SafeAreaView>
-    );
+
+                <FlatList
+                    key={keyForForceUpdate.toString()}
+                    data={products}
+                    renderItem={({ item }) => <ProductCard product={item} />}
+                    keyExtractor={(item) => item.id}
+                    contentContainerStyle={styles.cardList}
+                    numColumns={numColumns}
+                />
+                <StatusBar style="auto" />
+            </SafeAreaView>
+        );
+    }
 };
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginVertical: 20,
-        paddingVertical: 24,
-        paddingHorizontal: 15
+        backgroundColor: '#f0f0f0',
+        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
     },
-    container2: {
-        flex: 1,
-        padding: 24,
-        justifyContent: "center",
-        alignItems: "center",
-    }, search: {
-        margin: 5,
-        justifyContent: "center"
+    cardList: {
+        paddingHorizontal: 10,
+        paddingVertical: 20,
     },
-    searchbar: {
-        padding: 5,
-        height: "8%",
-        minHeight: 50,
-        width: "100%",
+});
 
-        flexDirection: "row",
-
-    },
-    list: {
-        width: "80%",
-
-    }
-
-})
+export default Home;
