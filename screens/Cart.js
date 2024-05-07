@@ -1,39 +1,44 @@
 import {View, Text, StyleSheet} from 'react-native';
-import {useCallback, useEffect, useRef, useState} from "react";
+import {useCallback, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { deleteFromCart, getMyCarts } from '../firebase/cart';
+import {deleteFromCart, getMyCarts} from '../firebase/cart';
 import Loading from '../components/Loading';
-import { FlatList } from 'react-native';
+import {FlatList} from 'react-native';
 import CartItem from '../components/CartItem';
-import Product from '../components/Product';
-import { useFocusEffect } from 'expo-router';
+import {useFocusEffect} from 'expo-router';
 
 export default function Cart() {
 
-    const [uid , setUid] = useState('');
-    const [loaded , setLoaded] = useState(false);
-    const [render , setRender] = useState([]);
-
-    const cart = useRef([]);
+    const [uid, setUid] = useState('');
+    const [loaded, setLoaded] = useState(false);
+    const [render, setRender] = useState([]);
+    const [cart, setCart] = useState([]); // [ {product: {name: "name", price: 0, quantity: 0}, quantity: 0}
+    //const cart = useRef([]);
 
     const fetchData = async () => {
         try {
+            setLoaded(false);
             const user = await AsyncStorage.getItem('user');
             const userUid = JSON.parse(user).uid;
             setUid(userUid);
             const currentCart = await getMyCarts(userUid);
-            cart.current = currentCart;
-            setRender(cart.current);
+            setCart(currentCart);
+            //cart.current = currentCart;
+            // setRender(cart.current);
+            console.log(currentCart);
             setLoaded(true);
         } catch (error) {
             console.log(error);
         }
     };
+    const handleDeleteFromCart = async () => {
+
+    }
 
     useFocusEffect(
         useCallback(() => {
-        fetchData();
-    }, []));
+            fetchData();
+        }, []));
 
     return (
         <View style={styles.container}>
@@ -41,19 +46,20 @@ export default function Cart() {
 
                 {!loaded ? (
                     <Loading/>
-                        ) : (
-                        <FlatList
+                ) : (
+                    <FlatList
                         style={styles.list}
-                        data={cart.current}
+                        data={cart}
                         renderItem={({item}) => (
-                        <CartItem product = {item} onDelete = {() => {deleteFromCart(item); fetchData();}} />
+                            <CartItem product={item} onDelete={async () => {
+                                await deleteFromCart(item);
+                                const newCart = cart.filter((cartItem) => cartItem.id !== item.id);
+                                setCart(newCart);
+                            }}/>
                         )
                         }
                     />
                 )}
-
-
-
 
 
             </Text>

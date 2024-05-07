@@ -1,15 +1,13 @@
-import {Pressable, StyleSheet, View, Text, Image} from "react-native";
-import React, {useEffect, useState} from "react";
+import {Pressable, StyleSheet, Text, Image} from "react-native";
+import React from "react";
 import Button from "./Button";
 import {router} from "expo-router";
-import { addToCart, deleteFromCart } from "../firebase/cart";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import {getUserByEmail} from "../firebase/users";
 
-export default function CartItem ({ product , onDelete }) {
+
+export default function CartItem({product, onDelete}) {
 
     return (
-        <Pressable onPress={() => router.navigate(`product/${product.id}`)} style={styles.container}>
+        <Pressable onPress={() => router.navigate(`product/${product.productId}`)} style={styles.container}>
             <Image source={require('../assets/favicon.png')} style={styles.image}/>
             <Text style={styles.text}>{product.productName}</Text>
             <Text style={styles.text}>{product.price}</Text>

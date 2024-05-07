@@ -1,22 +1,19 @@
-import { db } from "./config";
+import {db} from "./config";
 import {
     getDocs,
     doc,
-    setDoc,
     addDoc,
     deleteDoc,
     collection,
-    query,
-    where,
-    onSnapshot,
-    getDoc,
+
 } from "firebase/firestore";
 
-async function addToCart(uid , product) {
+async function addToCart(uid, product) {
     try {
         const docRef = await addDoc(collection(db, `users/${uid}/myCart`), {
             productName: product.productName,
-            price: product.price
+            price: product.price,
+            productId: product.id
         });
         console.log("Document written with ID: ", docRef.id);
     } catch (e) {
@@ -24,16 +21,16 @@ async function addToCart(uid , product) {
     }
 }
 
-async function getMyCarts (uid) {
+async function getMyCarts(uid) {
     const cartsCol = collection(db, `users/${uid}/myCart`);
     const cartSnapshot = await getDocs(cartsCol);
     const cartList = cartSnapshot.docs.map((doc) => {
-        return { id: doc.id, uid, ...doc.data() };
+        return {id: doc.id, uid, ...doc.data()};
     });
     return cartList;
 }
 
-async function deleteFromCart (product) {
+async function deleteFromCart(product) {
     try {
         await deleteDoc(doc(db, `users/${product.uid}/myCart`, product.id));
         console.log("Document deleted with ID: ", product.id);
@@ -43,24 +40,7 @@ async function deleteFromCart (product) {
 }
 
 
-
-
-
-
-
-
-export { addToCart , getMyCarts , deleteFromCart };
-
-
-
-
-
-
-
-
-
-
-
+export {addToCart, getMyCarts, deleteFromCart};
 
 
 //
