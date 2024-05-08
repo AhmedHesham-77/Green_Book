@@ -1,4 +1,4 @@
-import { Tabs} from 'expo-router';
+import {Tabs} from 'expo-router';
 import {FontAwesome, Ionicons, Feather} from '@expo/vector-icons';
 import {Image, View} from "react-native";
 import {useEffect, useState} from "react";
@@ -42,16 +42,16 @@ export default function TabsLayout() {
                     headerShown: false,
                     headerTitle: 'Profile',
                     title: '',
-                    tabBarIcon: ({ color }) => (
+                    tabBarIcon: ({color}) => (
                         image ? (
-                            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center',marginTop:10 }}>
+                            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 10}}>
                                 <Image
-                                    source={{ uri: image }}
-                                    style={{ width: 40, height: 40,borderRadius:20}}
+                                    source={{uri: image}}
+                                    style={{width: 40, height: 40, borderRadius: 20}}
                                 />
                             </View>
                         ) : (
-                            <FontAwesome size={36} name="user" color={color} /> // Placeholder icon
+                            <FontAwesome size={36} name="user" color={color}/> // Placeholder icon
                         )
                     ),
                 }}
@@ -65,6 +65,13 @@ export default function TabsLayout() {
                 tabBarIcon: ({color}) => <Ionicons name="person-circle" size={36} color={color}/>,
             }}/>
             <Tabs.Screen name='product/[id]' options={{
+                headerShown: false,
+                headerTitle: 'Profile',
+                title: '',
+                href: null,
+                tabBarIcon: ({color}) => <Ionicons name="person-circle" size={36} color={color}/>,
+            }}/>
+            <Tabs.Screen name='product/editProduct/[id]' options={{
                 headerShown: false,
                 headerTitle: 'Profile',
                 title: '',

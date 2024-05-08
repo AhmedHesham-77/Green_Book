@@ -1,14 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import { StyleSheet, View, Text, Pressable, Image } from 'react-native';
-import { router } from 'expo-router';
+import {StyleSheet, Text, Pressable, Image} from 'react-native';
+import {router} from 'expo-router';
 import Button from "./Button";
-import { addToCart, deleteFromCart } from "../firebase/cart";
+import {addToCart} from "../firebase/cart";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {deleteProduct} from "../firebase/products";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({product}) => {
 
-    const [uid , setUid] = useState('');
+    const [uid, setUid] = useState('');
 
+    const handleDeleteProduct = async () => {
+        await deleteProduct(product.id);
+    }
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -27,10 +31,17 @@ const ProductCard = ({ product }) => {
             onPress={() => router.navigate(`product/${product.id}`)}
             style={styles.container}
         >
-            <Image source={require('../assets/favicon.png')} style={styles.image} />
+            <Image source={require('../assets/favicon.png')} style={styles.image}/>
             <Text style={styles.text}>{product.productName}</Text>
             <Text style={styles.text}>${product.price}</Text>
-            <Button title={"Add to Cart"} onPress={() => addToCart(uid, product)} styles = {{ backgroundColor: 'green'}} textColor = 'white' />
+            <Button title={"Add to Cart"} styles={styles.button} onPress={() => addToCart(uid, product)}
+                    textColor='white'/>
+            <Button title={"Delete Product"} styles={styles.button} onPress={handleDeleteProduct}
+                    textColor='white'/>
+            <Button title={"Edit Product"} styles={styles.button}
+                    onPress={() => router.navigate(`product/editProduct/${product.id}`)}
+                    textColor='white'/>
+
         </Pressable>
     );
 };
@@ -45,7 +56,7 @@ const styles = StyleSheet.create({
         margin: 10,
         borderRadius: 8,
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
@@ -65,6 +76,10 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginTop: 5,
     },
+    button: {
+        backgroundColor: 'green'
+        , margin: 5
+    }
 });
 
 export default ProductCard;

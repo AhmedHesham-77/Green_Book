@@ -6,10 +6,7 @@ import {
     addDoc,
     deleteDoc,
     collection,
-    query,
     getDoc,
-    where,
-    onSnapshot,
 } from "firebase/firestore";
 
 
@@ -28,7 +25,7 @@ async function getProduct(id) {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
+        // console.log("Document data:", docSnap.data());
         return {id: id, ...docSnap.data()};
     }
 

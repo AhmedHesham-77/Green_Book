@@ -122,7 +122,7 @@ const Register = () => {
                         setPhone(formattedPhone);
                 }}
                 style={styles.input}
-                keyboardType="numeric"
+                inputMode="numeric"
             />
             <View style={styles.input}>
                 {showPicker && (<DateTimePicker
