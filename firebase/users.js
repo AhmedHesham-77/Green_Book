@@ -1,19 +1,18 @@
-import { db } from "./config";
+import {db} from "./config";
 import {
   getDocs,
   doc,
   collection,
   query,
   where,
-  updateDoc,
-  getDoc,
+  updateDoc, getDoc,
 } from "firebase/firestore";
 
 async function getUsers() {
   const usersCol = collection(db, "users");
   const usersSnapshot = await getDocs(usersCol);
   const usersList = usersSnapshot.docs.map((doc) => {
-    return { id: doc.id, ...doc.data() };
+    return {id: doc.id, ...doc.data()};
   });
   return usersList;
 }
@@ -23,7 +22,7 @@ async function getUserByEmail(email) {
   const que = query(usersColumn, where("email", "==", email));
   const userSnapShot = await getDocs(que);
   const userObject = userSnapShot.docs.map((doc) => {
-    return { id: doc.id, ...doc.data() };
+    return {id: doc.id, ...doc.data()};
   });
   return userObject[0];
 }
@@ -34,12 +33,12 @@ async function getUser(id) {
 
   if (docSnap.exists()) {
     //   console.log("Document data:", docSnap.data());
-    return { id: id, ...docSnap.data() };
+    return {id: id, ...docSnap.data()};
   }
 
   // docSnap.data() will be undefined in this case
   console.log("No such document!");
-  return undefined;
+  return undefined
 }
 
 async function updateUser(uid, user) {
@@ -50,11 +49,18 @@ async function updateUser(uid, user) {
   });
 }
 
-async function updateUserImage(uid, image) {
+async function updateUserBalance(uid, newBalance) {
   const usersColumn = doc(db, "users", uid);
   await updateDoc(usersColumn, {
-    profile_image: image,
+    balance: newBalance
   });
 }
 
-export { getUserByEmail, getUser, updateUser, updateUserImage, getUsers };
+async function updateUserImage(uid, image) {
+  const usersColumn = doc(db, "users", uid);
+  await updateDoc(usersColumn, {
+    profile_image: image
+  });
+}
+
+export {getUserByEmail, updateUserBalance, getUser, updateUser, updateUserImage, getUsers};

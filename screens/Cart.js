@@ -1,17 +1,20 @@
 import {View, Text, StyleSheet} from 'react-native';
-import {useCallback, useState} from "react";
+import React, {useCallback, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {deleteFromCart, getMyCarts} from '../firebase/cart';
+import {emptyCart, deleteFromCart, getMyCarts} from '../firebase/cart';
 import Loading from '../components/Loading';
 import {FlatList} from 'react-native';
 import CartItem from '../components/CartItem';
-import {useFocusEffect} from 'expo-router';
+import {router, useFocusEffect} from 'expo-router';
+import Button from "../components/Button";
+import {getUser, updateUserBalance} from "../firebase/users";
 
 export default function Cart() {
 
     const [uid, setUid] = useState('');
+    const [user, setUser] = useState();
     const [loaded, setLoaded] = useState(false);
-    const [render, setRender] = useState([]);
+    //const [render, setRender] = useState([]);
     const [cart, setCart] = useState([]); // [ {product: {name: "name", price: 0, quantity: 0}, quantity: 0}
     //const cart = useRef([]);
 
@@ -21,6 +24,8 @@ export default function Cart() {
             const user = await AsyncStorage.getItem('user');
             const userUid = JSON.parse(user).uid;
             setUid(userUid);
+            const myUser = await getUser(userUid);
+            setUser(myUser);
             const currentCart = await getMyCarts(userUid);
             setCart(currentCart);
             //cart.current = currentCart;
@@ -31,6 +36,28 @@ export default function Cart() {
             console.log(error);
         }
     };
+    const handleCheckout = async () => {
+        if (cart.length === 0) {
+            alert("Cart is empty");
+            return;
+        }
+        let total = 0;
+        cart.forEach((item) => {
+            total += item.price * item.counter;
+        });
+
+        if (total > user.balance) {
+            alert("Insufficient balance");
+            return;
+        }
+        const newBalance = user.balance - total;
+        await updateUserBalance(uid, newBalance);
+        setUser({...user, balance: newBalance});
+        console.log(user);
+        await emptyCart(uid);
+        router.navigate('(tabs)');
+
+    }
     const handleDeleteFromCart = async () => {
 
     }
@@ -61,6 +88,27 @@ export default function Cart() {
                     />
                 )}
 
+                <Button
+                    title="Checkout"
+                    textColor="white"
+                    onPress={handleCheckout}
+                    styles={({pressed}) => [
+                        {opacity: pressed ? 0.2 : 1},
+                        {
+                            justifyContent: "center",
+                            alignItems: "center",
+                            borderWidth: 1,
+                            borderColor: "#a4ed80",
+                            paddingVertical: 12,
+                            paddingHorizontal: 20,
+                            marginTop: 30,
+                            marginBottom: 20,
+                            width: "80%",
+                            borderRadius: 10,
+                            backgroundColor: "#246c3a",
+                        },
+                    ]}
+                />
 
             </Text>
         </View>

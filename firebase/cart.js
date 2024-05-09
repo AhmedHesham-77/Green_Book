@@ -60,8 +60,23 @@ async function deleteFromCart(product) {
     }
 }
 
+async function emptyCart(uid) {
+    try {
+        const cartRef = collection(db, `users/${uid}/myCart`);
+        const cartSnapshot = await getDocs(cartRef);
 
-export {addToCart, getFromCart, editFromCart, getMyCarts, deleteFromCart};
+        cartSnapshot.forEach(async (doc) => {
+            await deleteDoc(doc.ref);
+        });
+
+        console.log("All documents deleted from cart.");
+    } catch (error) {
+        console.error("Error deleting documents: ", error);
+    }
+}
+
+
+export {addToCart, emptyCart, getFromCart, editFromCart, getMyCarts, deleteFromCart};
 
 
 //
