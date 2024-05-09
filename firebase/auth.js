@@ -1,9 +1,10 @@
-import {db, auth} from "./config";
+import {db, auth, googleProvider} from "./config";
 import {
     onAuthStateChanged,
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     sendPasswordResetEmail,
+    signInWithPopup,
     signOut,
 } from "firebase/auth";
 import {doc, setDoc} from "firebase/firestore";
@@ -13,6 +14,7 @@ onAuthStateChanged(auth, (user) => {
         console.log("We are authenticated now!");
     }
 });
+
 
 async function isSignedIn() {
     console.log("from isSignedIn method: ", authentication.currentUser);
@@ -40,6 +42,7 @@ async function register(username, email, phone, password, date) {
     return credentials; // return some 'credentials' of the created user.
 }
 
+
 async function login(email, password) {
     await signInWithEmailAndPassword(auth, email, password);
 }
@@ -49,8 +52,34 @@ async function reset(email) {
     await sendPasswordResetEmail(auth, email);
 }
 
+const signInWithGoogle = async () => {
+    try {
+        console.log(2222);
+
+        const result = await signInWithPopup(auth, googleProvider)
+        console.log(11111);
+        GoogleAuthProvider.credentialFromResult(result);
+
+
+        console.log("result", result);
+        await setDoc(doc(db, "users", auth.currentUser.uid), {
+            name: result.user.displayName,
+            email: result.user.email,
+            phone: result.user.phoneNumber,
+            profile_image: result.user.photoURL,
+            birthOfDate: null,
+            isAdmin: false,
+            balance: 100,
+        });
+
+    } catch (error) {
+        console.log(error);
+
+    }
+};
+
 async function logout() {
     await signOut(auth);
 }
 
-export {register, login, logout, reset, isSignedIn};
+export {register, signInWithGoogle, login, logout, reset, isSignedIn};

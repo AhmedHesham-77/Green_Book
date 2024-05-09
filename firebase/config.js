@@ -1,6 +1,6 @@
 import {initializeApp} from "firebase/app";
 import {getReactNativePersistence} from "@firebase/auth/dist/rn/index.js";
-import {getAuth} from "firebase/auth";
+import {getAuth, GoogleAuthProvider} from "firebase/auth";
 import {getFirestore} from "firebase/firestore";
 import {getDownloadURL, getStorage, ref, uploadBytesResumable} from "firebase/storage";
 import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
@@ -21,7 +21,10 @@ const auth = getAuth(app, {
 });
 const storage = getStorage();
 
-const uploadImage = async (folder,uri, name, onProgress) => {
+const googleProvider = new GoogleAuthProvider();
+
+
+const uploadImage = async (folder, uri, name, onProgress) => {
 
     const fetchResponse = await fetch(uri);
     const theBlob = await fetchResponse.blob();
@@ -48,4 +51,4 @@ const uploadImage = async (folder,uri, name, onProgress) => {
 
 }
 
-export {app, db, auth, storage,uploadImage};
+export {app, db, auth, googleProvider, storage, uploadImage};

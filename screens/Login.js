@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {View, TextInput, Pressable, Text, StyleSheet} from "react-native";
 import {LinearGradient} from "expo-linear-gradient";
 import {router} from "expo-router";
-import {login} from "../firebase/auth";
+import {login, signInWithGoogle} from "../firebase/auth";
 import {Ionicons} from "@expo/vector-icons";
 import Button from "../components/Button";
 
@@ -14,14 +14,15 @@ const Login = () => {
 
     const handleLogin = async () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!email || !password) return setError("Email and password are required");
+        const myEmail = email.trim(); // Trim the email
+
+        if (!myEmail || !password) return setError("Email and password are required");
         else if (password.length < 6)
             return setError("Password must be at least 6 characters");
-        else if (!emailRegex.test(email))
+        else if (!emailRegex.test(myEmail))
             return setError("Invalid email");
         try {
-            const credentials = await login(email, password);
-            console.log(`credentials ${credentials}`);
+           await login(myEmail, password);
             router.navigate("(tabs)");
         } catch (error) {
             if (error.code === "auth/invalid-email") {
@@ -91,6 +92,26 @@ const Login = () => {
                     },
                 ]}
             />
+            <Button
+                title="Sign in with Google"
+                textColor="white"
+                onPress={signInWithGoogle}
+                styles={({pressed}) => [
+                    {opacity: pressed ? 0.2 : 1},
+                    {
+                        justifyContent: "center",
+                        alignItems: "center",
+                        borderWidth: 1,
+                        borderColor: "#bd0e13",
+                        paddingVertical: 12,
+                        paddingHorizontal: 20,
+                        marginBottom: 20,
+                        width: "80%",
+                        borderRadius: 10,
+                        backgroundColor: "#bd0e13",
+                    },
+                ]}
+            />
             {error ? <Text style={styles.error}>{error}</Text> : null}
             <View style={styles.linksContainer}>
                 <Pressable onPress={() => router.replace("/account/register")}>
@@ -99,6 +120,7 @@ const Login = () => {
                 <Pressable onPress={() => router.replace("/account/reset")}>
                     <Text style={styles.link}>Forgot Password</Text>
                 </Pressable>
+
             </View>
         </LinearGradient>
     );

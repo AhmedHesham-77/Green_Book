@@ -66,11 +66,13 @@ const Register = () => {
     const handlePress = async () => {
         const isValidName = /^[a-zA-Z\s]*$/.test(name)
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const myEmail = email.trim(); // Trim the email
 
-        if (!email || !password) return setError("Email and password are required");
+
+        if (!myEmail || !password) return setError("Email and password are required");
         else if (password.length < 6)
             return setError("Password must be at least 6 characters");
-        else if (!emailRegex.test(email))
+        else if (!emailRegex.test(myEmail))
             return setError("Invalid email");
         else if (!name)
             return setError("please enter name");
@@ -81,7 +83,7 @@ const Register = () => {
         else if (!dateChanged)
             return setError("Enter your birthdate");
         try {
-            await register(name, email, phone, password, dateOfBirth);
+            await register(name, myEmail, phone, password, dateOfBirth);
             router.navigate("/account/login");
         } catch (error) {
             if (error.code === "auth/email-already-in-use") {
