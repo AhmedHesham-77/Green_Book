@@ -62,7 +62,7 @@ export default function TabsLayout() {
             headerTitle: "Add product",
             title: "",
             tabBarIcon: ({ color }) => (
-              <AntDesign name="pluscircleo" size={30} color="black" />
+              <AntDesign name="pluscircleo" size={30} color={color} />
             ),
           }}
         />

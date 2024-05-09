@@ -8,6 +8,7 @@ import { StyleSheet, Text, Pressable, Image, View } from "react-native";
 import { router } from "expo-router";
 import { addToCart } from "../firebase/cart";
 import { getUser } from "../firebase/users";
+import { Ionicons } from "@expo/vector-icons";
 
 const ProductCard = ({ product, onDelete }) => {
   const [uid, setUid] = useState("");
@@ -34,9 +35,8 @@ const ProductCard = ({ product, onDelete }) => {
       onPress={() => router.navigate(`product/${product.id}`)}
       style={styles.parent}
     >
-      <Image source={require("../assets/Book.jpg")} style={styles.image} />
+      <Image source={{ uri: product.ImageUrl }} style={styles.image} />
       <Text style={styles.title}>
-        {" "}
         {product.productName.length > 30
           ? product.productName.substring(0, 12).concat("...")
           : product.productName}{" "}
@@ -63,6 +63,16 @@ const ProductCard = ({ product, onDelete }) => {
       </View>
       <View style={styles.textParant}>
         <Text style={styles.price}> ${product.price} </Text>
+      </View>
+      <View style={styles.textParant}>
+        <Ionicons name="star" size={24} color="#FFD700" />
+
+        <Text style={styles.price}>
+          {product.NumberReviews
+            ? Math.ceil((product.TotalReviews / product.NumberReviews) * 10) /
+              10
+            : 0}
+        </Text>
       </View>
     </Pressable>
   );
