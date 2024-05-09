@@ -1,15 +1,22 @@
-import {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef, useMemo, useCallback} from 'react';
 import {View, Image, Text, StyleSheet, Pressable, TextInput, Alert, TouchableOpacity} from 'react-native';
-import {MaterialIcons, Fontisto, Feather, FontAwesome5} from '@expo/vector-icons';
+import {MaterialIcons, Fontisto, Feather, FontAwesome5, FontAwesome} from '@expo/vector-icons';
 import {logout} from '../firebase/auth';
 import {router} from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { updateUser, updateUserImage} from '../firebase/users';
+import {updateUser, updateUserImage} from '../firebase/users';
 import Loading from '../components/Loading';
 import Dialog from "react-native-dialog";
 import {getUser} from "../firebase/users";
 import * as ImagePicker from "expo-image-picker"
-import { uploadImage} from "../firebase/config";
+import {uploadImage} from "../firebase/config";
+import BottomSheet, {
+    BottomSheetModal, BottomSheetView,
+    BottomSheetModalProvider, BottomSheetBackdrop, BottomSheetTextInput,
+} from '@gorhom/bottom-sheet';
+import {GestureHandlerRootView} from "react-native-gesture-handler";
+import Button from '../components/Button'
+
 
 export default function Profile() {
     const [userData, setUserData] = useState(null);
@@ -18,8 +25,19 @@ export default function Profile() {
     const [phone, setPhone] = useState("");
     const [date, setDate] = useState("");
     const [image, setImage] = useState("");
-    const [visible, setVisible] = useState(false);
     const [error, setError] = useState("");
+    const bottomSheetModalRef = useRef(null);
+    const snapPoints = useMemo(() => ['40%', '50%'], []);
+
+    const handlePresentModalPress = useCallback(() => {
+        bottomSheetModalRef.current?.present();
+    }, []);
+
+    const handleSheetChanges = useCallback((index) => {
+        console.log('handleSheetChanges', index);
+    }, []);
+
+    const handleCloseSheet = bottomSheetModalRef.current?.close;
 
     const updateImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -37,14 +55,6 @@ export default function Profile() {
             await updateUserImage(id, uploadResponse.downloadUrl);
             setImage(uploadResponse.downloadUrl);
         }
-    };
-
-    const handleCancel = () => {
-        setVisible(false);
-    };
-
-    const handleEditProfile = () => {
-        setVisible(true);
     };
 
     useEffect(() => {
@@ -65,7 +75,6 @@ export default function Profile() {
         };
         fetchData();
     }, []);
-
 
     const handleLogout = async () => {
         await logout();
@@ -93,17 +102,17 @@ export default function Profile() {
             const user = {name: name, phone: phone};
             await updateUser(userData.id, user);
             Alert.alert("successfully updated");
+            handleCloseSheet()
         } catch (error) {
             console.log(error);
             setError(error.message);
-
         }
     };
     if (!userData) {
         return <Loading/>;
     } else {
         return (
-            <View style={styles.container}>
+            <GestureHandlerRootView style={styles.container}>
                 <Pressable onPress={handleLogout} style={styles.logoutButton}>
                     <MaterialIcons
                         name="logout"
@@ -160,28 +169,44 @@ export default function Profile() {
                     />
                 </View>
 
-                <Pressable onPress={handleUpdate} style={styles.button}>
-                    <Text style={styles.buttonText}> Save Changes </Text>
-                </Pressable>
-
-                <Pressable onPress={handleEditProfile} style={styles.button}>
-                    <Text style={styles.buttonText}> Edit Profile </Text>
-                </Pressable>
-
-                <Dialog.Container visible={visible}>
-                    <Dialog.Title> Edit your name and password </Dialog.Title>
-                    <Dialog.Description> Do you want to edit this account? You cannot undo this
-                        action. </Dialog.Description>
-                    <Dialog.Input value={name} onChangeText={setName} placeholder='Enter your new name'/>
-                    <Dialog.Input value={phone} onChangeText={setPhone} placeholder='Enter your new phone'/>
-                    <Dialog.Button label='CANCEL' onPress={handleCancel}/>
-                    <Dialog.Button label='EDIT' onPress={handleUpdate}
-                                   style={{backgroundColor: 'green', color: 'white'}}/>
-                    <Dialog.Description style={styles.error}>{error}</Dialog.Description>
-                </Dialog.Container>
-
-
-            </View>);
+                <BottomSheetModalProvider>
+                    <Button
+                        onPress={handlePresentModalPress}
+                        title="Edit Profile"
+                        style={styles.buttonText}
+                    />
+                    <BottomSheetModal
+                        ref={bottomSheetModalRef}
+                        index={0}
+                        snapPoints={snapPoints}
+                        onChange={handleSheetChanges}
+                        enablePanDownToClose={true}
+                        backgroundStyle={{backgroundColor: "rgba(210,225,210,0.99)"}}
+                    >
+                        <BottomSheetView style={styles.contentContainer}>
+                            <Text style={styles.contentContainerText}>Edit profile</Text>
+                        </BottomSheetView>
+                        <BottomSheetView style={styles.input}>
+                            <FontAwesome size={36} style={{marginRight: 10}} name="user" color={'green'}/>
+                            <BottomSheetTextInput
+                                placeholder="Enter new name"
+                                onChangeText={setName}
+                            />
+                        </BottomSheetView>
+                        <BottomSheetView style={styles.input}>
+                            <Feather name="phone-call" size={30} style={{marginRight: 10}} color="green"/>
+                            <BottomSheetTextInput
+                                placeholder="Enter new phone number"
+                                onChangeText={setPhone}
+                            />
+                        </BottomSheetView>
+                        <Pressable onPress={handleUpdate}>
+                            <Text style={styles.buttonText}> Update </Text>
+                        </Pressable>
+                    </BottomSheetModal>
+                </BottomSheetModalProvider>
+            </GestureHandlerRootView>)
+            ;
     }
 }
 
@@ -232,13 +257,16 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         marginBottom: 10,
         paddingHorizontal: 10,
-        width: "90%",
+        width: "80%",
         backgroundColor: "#fff",
-        alignItems: "center"
+        alignItems: "center",
+        alignSelf: 'center',
+
     },
     buttonText: {
-        color: "#666", // White button text
+        color: "black", // White button text
         fontSize: 16,
+        alignSelf:'center'
     }, error: {
         color: "red",
         marginTop: 10,
@@ -271,5 +299,13 @@ const styles = StyleSheet.create({
         height: 150,
         borderColor: "#ccc",
         borderWidth: 5
+    },
+    contentContainer: {
+        alignItems: 'center',
+    },
+    contentContainerText: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        margin: 10
     }
 });
