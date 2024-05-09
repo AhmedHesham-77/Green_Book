@@ -129,6 +129,14 @@ export default function TabsLayout() {
           ),
         }}
       />
+
+        <Tabs.Screen name='search' options={{
+            headerShown: false,
+            headerTitle: 'search',
+            title: "",
+            href: null,
+            tabBarIcon: ({color}) => <FontAwesome name="search" size={24} color={color}/>
+        }}/>
     </Tabs>
   );
 }
