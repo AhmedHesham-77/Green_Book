@@ -20,11 +20,11 @@ const ForgetPassword = () => {
     try {
       await reset(email);
       console.log("Password reset");
-      setError(""); // Clear error state
+      setError("");
       Alert.alert("Email for resetting password sent");
     } catch (error) {
       console.log("error", JSON.stringify(error));
-      setError(error.code); // Set error state
+      setError(error.code);
     }
   };
 

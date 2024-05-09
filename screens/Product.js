@@ -4,6 +4,8 @@ import { editProduct, getProduct } from "../firebase/products";
 import Loading from "../components/Loading";
 import { Ionicons } from "@expo/vector-icons";
 import { addToCart } from "../firebase/cart";
+import { addReview, getReview } from "../firebase/products";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import BackButton from "../components/BackButton";
 
@@ -12,7 +14,6 @@ export default function Product({ id }) {
   const [loaded, setLoaded] = useState(false);
   const [uid, setUid] = useState("");
   const [review, setReview] = useState(1);
-
   useEffect(() => {
     const getUid = async () => {
       try {
@@ -42,18 +43,27 @@ export default function Product({ id }) {
   };
 
   const handleReview = async () => {
-    const product0 = {
-      productName: product.productName,
-      price: Number(product.price),
-      Quantity: Number(product.productQuantity),
-      description: product.description,
-      ImageUrl: product.ImageUrl,
-      id: product.id,
-      NumberReviews: product.NumberReviews + 1,
-      TotalReviews: product.TotalReviews + review,
-    };
-    await editProduct(product0);
-    setProduct(product0);
+    const rev = await getReview(product.id);
+    const ans = rev.find((cur) => {
+      return cur.uid === uid;
+    });
+    if (ans != null) {
+      alert("you are review");
+    } else {
+      const product0 = {
+        productName: product.productName,
+        price: Number(product.price),
+        Quantity: Number(product.productQuantity),
+        description: product.description,
+        ImageUrl: product.ImageUrl,
+        id: product.id,
+        NumberReviews: product.NumberReviews + 1,
+        TotalReviews: product.TotalReviews + review,
+      };
+      await editProduct(product0);
+      setProduct(product0);
+      await addReview(product.id, uid);
+    }
   };
 
   return loaded ? (
@@ -104,7 +114,9 @@ export default function Product({ id }) {
         ))}
       </View>
       <TouchableOpacity
-        onPress={() => handleReview()}
+        onPress={() => {
+          handleReview();
+        }}
         style={styles.addToCartButton}
       >
         <Text style={styles.addToCartButtonText}>Review</Text>
