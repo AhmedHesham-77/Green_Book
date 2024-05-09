@@ -1,20 +1,19 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, Pressable, Image} from 'react-native';
-import {router} from 'expo-router';
-import Button from "./Button";
-import {addToCart} from "../firebase/cart";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import {deleteProduct} from "../firebase/products";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Button from './Button';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import Feather from '@expo/vector-icons/Feather';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import { useEffect , useState } from 'react';
+import { StyleSheet , Text , Pressable , Image , View } from 'react-native';
+import { router } from 'expo-router';
+import { addToCart } from '../firebase/cart';
 
-const ProductCard = ({product}) => {
+const ProductCard = ({ product , onDelete }) => {
 
-    const [uid, setUid] = useState('');
+    const [uid , setUid] = useState('');
 
-    const handleDeleteProduct = async () => {
-        await deleteProduct(product.id);
-    }
     useEffect(() => {
-        const fetchData = async () => {
+        const getUid = async () => {
             try {
                 const user = await AsyncStorage.getItem('user');
                 const userUid = JSON.parse(user).uid;
@@ -23,63 +22,85 @@ const ProductCard = ({product}) => {
                 console.log(error);
             }
         };
-        fetchData();
+        getUid();
     }, []);
 
     return (
-        <Pressable
-            onPress={() => router.navigate(`product/${product.id}`)}
-            style={styles.container}
-        >
-            <Image source={require('../assets/favicon.png')} style={styles.image}/>
-            <Text style={styles.text}>{product.productName}</Text>
-            <Text style={styles.text}>${product.price}</Text>
-            <Button title={"Add to Cart"} styles={styles.button} onPress={() => addToCart(uid, product)}
-                    textColor='white'/>
-            <Button title={"Delete Product"} styles={styles.button} onPress={handleDeleteProduct}
-                    textColor='white'/>
-            <Button title={"Edit Product"} styles={styles.button}
-                    onPress={() => router.navigate(`product/editProduct/${product.id}`)}
-                    textColor='white'/>
-
+        <Pressable onPress = {() => router.navigate(`product/${product.id}`)} style = {styles.parent}>
+            <Image source = {require('../assets/Book.jpg')} style = {styles.image} />
+            <Text style = {styles.title}> {(product.productName.length > 30) ? (product.productName).substring(0 , 12).concat('...') : product.productName} </Text>
+            <View style = {styles.buttonsParnet}>
+                <Pressable style = {styles.icon} onPress = {() => onDelete()}>
+                    <AntDesign name = 'delete' size = {24} color = 'red' />
+                </Pressable>
+                <Pressable style = {styles.icon} onPress={() => router.navigate(`product/editProduct/${product.id}`)}>
+                    <FontAwesome5 name = 'edit' size = {24} color = 'black' />
+                </Pressable>
+                <Pressable style = {styles.icon} onPress = {() => addToCart(uid , product)}>
+                    <Feather name = 'shopping-cart' size = {24} color = 'black' />
+                </Pressable>
+            </View>
+            <View style = {styles.textParant}>
+                <Text style = {styles.price}> ${product.price} </Text>
+            </View>
         </Pressable>
     );
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#fff',
-        padding: 10,
+    parent: {
+        paddingBottom: 10,
         margin: 10,
-        borderRadius: 8,
+        width: 150,
+        backgroundColor: 'white',
+        borderRadius: 10,
         shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
+        shadowRadius: 3,
+        shadowOpacity: 0.2,
+        elevation: 5
     },
     image: {
-        width: 100,
-        height: 100,
-        marginBottom: 10,
+        width: 150,
+        height: 175,
+        resizeMode: 'stretch',
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10
     },
-    text: {
+    title: {
         fontSize: 16,
-        marginBottom: 5,
-    },
-    addToCart: {
-        backgroundColor: 'blue',
-        padding: 10,
-        borderRadius: 5,
         marginTop: 5,
+        width: 150,
+        paddingHorizontal: 5,
+        color: '#333',
+        textAlign: 'left'
     },
-    button: {
-        backgroundColor: 'green'
-        , margin: 5
-    }
+    buttonsParnet: {
+        width: 150,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        paddingBottom: 5,
+        paddingTop: 5,
+        paddingVertical: 5,
+    },
+    textParant: {
+        width: 150,
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        paddingHorizontal: 5,
+    },
+    icon: {
+        padding: 5,
+        borderRadius: 20,
+        backgroundColor: '#f0f0f0',
+    },
+    price: {
+        fontSize: 20,
+        color: 'green',
+        fontWeight: 'bold',
+        borderRadius: 10,
+        padding: 5,
+        backgroundColor: '#f0f0f0',
+    },
 });
 
 export default ProductCard;
