@@ -1,27 +1,44 @@
-import React, { useState } from "react";
-import { View, StyleSheet, TextInput } from 'react-native';
+import React, {useEffect, useState} from "react";
+import {View, StyleSheet, TextInput} from 'react-native';
 import Button from "./Button";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {getProducts} from "../firebase/products";
 
-export default function SearchBar({ onPress , windowWidth }) {
+export default function SearchBar({onPress, windowWidth}) {
     const [searchText, setSearchText] = useState("");
+    const [Data, setData] = useState([]);
+    const [searchData, setSearchData] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const productsData = await getProducts();
+                setData(productsData);
+                setSearchData(productsData)
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        fetchData();
+    }, []);
+
+    const searchItems = (searchFor) => {
+        setSearchData(Data.filter((item) => item.productName.includes(searchFor) ));
+    };
+
 
     return (
-        <View style={[styles.container , { width: windowWidth - 60 }]}>
+        <View style={styles.container}>
             <TextInput
                 style={styles.input}
                 placeholder="Search For"
                 value={searchText}
                 onChangeText={(text) => {
-                    setSearchText(text);
-                    console.log(text);
+                    setSearchText(text)
+                    searchItems(text)
                 }}
             />
-            <Button
-                title= 'Search'
-                textColor="white"
-                onPress={onPress}
-                styles={styles.button}
-            />
+
         </View>
     );
 };
@@ -36,7 +53,6 @@ const styles = StyleSheet.create({
         width: '75%',
         paddingVertical: 8,
         paddingHorizontal: 12,
-        backgroundColor: "#fff",
         borderTopLeftRadius: 15,
         borderBottomLeftRadius: 15,
         backgroundColor: '#e8e8e8'

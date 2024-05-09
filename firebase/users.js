@@ -2,12 +2,20 @@ import {db} from "./config";
 import {
     getDocs,
     doc,
-
     collection,
     query,
     where,
     updateDoc, getDoc,
 } from "firebase/firestore";
+
+async function getUsers() {
+    const usersCol = collection(db, "users");
+    const usersSnapshot = await getDocs(usersCol);
+    const usersList = usersSnapshot.docs.map((doc) => {
+        return {id: doc.id, ...doc.data()};
+    });
+    return usersList;
+}
 
 async function getUserByEmail(email) {
     const usersColumn = collection(db, "users");
@@ -48,4 +56,4 @@ async function updateUserImage(uid, image) {
     });
 }
 
-export {getUserByEmail, getUser, updateUser, updateUserImage};
+export {getUserByEmail, getUser, updateUser, updateUserImage,getUsers};
