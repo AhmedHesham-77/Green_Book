@@ -1,6 +1,5 @@
 import Loading from '../components/Loading';
 import ProductCard from '../components/ProductCard';
-import SearchBar from '../components/SearchBar';
 import React, { useState , useEffect , useCallback } from 'react';
 import {
     StyleSheet,
