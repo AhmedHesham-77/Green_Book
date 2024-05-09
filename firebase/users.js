@@ -32,7 +32,7 @@ async function getUser(id) {
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
+        //   console.log("Document data:", docSnap.data());
         return {id: id, ...docSnap.data()};
     }
 
@@ -56,4 +56,4 @@ async function updateUserImage(uid, image) {
     });
 }
 
-export {getUserByEmail, getUser, updateUser, updateUserImage,getUsers};
+export {getUserByEmail, getUser, updateUser, updateUserImage, getUsers};

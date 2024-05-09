@@ -11,6 +11,7 @@ export default function CartItem({product, onDelete}) {
             <Image source={require('../assets/favicon.png')} style={styles.image}/>
             <Text style={styles.text}>{product.productName}</Text>
             <Text style={styles.text}>{product.price}</Text>
+            <Text style={styles.text}>   {product.counter}</Text>
             <Button styles={styles.deleteFromCart} title={"DeleteFromCart"} onPress={() => {
                 onDelete();
             }}/>

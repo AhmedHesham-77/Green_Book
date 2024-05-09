@@ -2,24 +2,45 @@ import {db} from "./config";
 import {
     getDocs,
     doc,
-    addDoc,
     deleteDoc,
-    collection,
+    collection, setDoc, getDoc,
 
 } from "firebase/firestore";
 
 async function addToCart(uid, product) {
     try {
-        const docRef = await addDoc(collection(db, `users/${uid}/myCart`), {
+
+        const data = {
             productName: product.productName,
             price: product.price,
-            productId: product.id
-        });
-        console.log("Document written with ID: ", docRef.id);
+            counter: 1
+        }
+
+        await setDoc(doc(db, `users/${uid}/myCart`, product.id), data);
+
     } catch (e) {
-        console.error("Error adding document: ", e);
+        console.error("Error adding document:", e);
     }
 }
+
+async function editFromCart(uid, product) {
+    await setDoc(doc(db, `users/${uid}/myCart`, product.id), product);
+}
+
+
+async function getFromCart(uid, id) {
+    const docRef = doc(db, `users/${uid}/myCart`, id);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+        // console.log("Document data:", docSnap.data());
+        return {id: id, ...docSnap.data()};
+    }
+
+    // docSnap.data() will be undefined in this case
+    return undefined
+}
+
 
 async function getMyCarts(uid) {
     const cartsCol = collection(db, `users/${uid}/myCart`);
@@ -40,7 +61,7 @@ async function deleteFromCart(product) {
 }
 
 
-export {addToCart, getMyCarts, deleteFromCart};
+export {addToCart, getFromCart, editFromCart, getMyCarts, deleteFromCart};
 
 
 //
