@@ -36,6 +36,14 @@ export default function TabsLayout() {
                 title: '',
                 tabBarIcon: ({color}) => <Feather name="shopping-cart" size={30} color={color}/>
             }}/>
+
+            <Tabs.Screen name='search' options={{
+                headerShown: false,
+                headerTitle: 'search',
+                title: 'search',
+                tabBarIcon: ({color}) => <FontAwesome name="search" size={24} color={color}/>
+            }}/>
+
             <Tabs.Screen
                 name='profile'
                 options={{
@@ -56,6 +64,7 @@ export default function TabsLayout() {
                     ),
                 }}
             />
+
 
             <Tabs.Screen name='product/index' options={{
                 headerShown: false,

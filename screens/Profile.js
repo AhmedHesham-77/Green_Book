@@ -83,7 +83,6 @@ export default function Profile() {
 
     const handleUpdate = async () => {
 
-
         const isValidName = /^[a-zA-Z\s]*$/.test(name)
         if (!name)
             return setError("please enter name");

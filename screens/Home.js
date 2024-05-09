@@ -1,12 +1,24 @@
 import Loading from '../components/Loading';
 import ProductCard from '../components/ProductCard';
 import SearchBar from '../components/SearchBar';
-import { useState , useEffect , useCallback } from 'react';
-import { StyleSheet , SafeAreaView , View , StatusBar , FlatList , useWindowDimensions , Platform , Dimensions , Pressable } from 'react-native';
+import React, { useState , useEffect , useCallback } from 'react';
+import {
+    StyleSheet,
+    SafeAreaView,
+    View,
+    StatusBar,
+    FlatList,
+    useWindowDimensions,
+    Platform,
+    Dimensions,
+    Pressable,
+    TextInput
+} from 'react-native';
 import { getProducts } from '../firebase/products';
 import { FontAwesome } from '@expo/vector-icons';
-import { useFocusEffect } from 'expo-router';
+import {router, useFocusEffect} from 'expo-router';
 import { deleteProduct } from '../firebase/products';
+import Search from "../app/(tabs)/search";
 
 const Home = () => {
 
@@ -20,6 +32,7 @@ const Home = () => {
         const newProducts = await getProducts();
         setProducts(newProducts);
         setLoaded(true);
+
     };
 
     const handleScreenResize = useCallback(() => {
@@ -44,10 +57,16 @@ const Home = () => {
         return (
             <SafeAreaView style = {[styles.parent , { width: windowWidth }]}>
                 <View style = {styles.searchBar}>
-                    <Pressable style = {{ padding: 15 }} onPress={() => { setSearchButton(!searchButton); }}>
-                        <FontAwesome name = 'search' size = {25} color = 'green' />
+                    <Pressable style = {{ padding: 15 }} onPress={() => router.navigate('/(tabs)/search')}>
+                        <View style = {[styles.input , { width: windowWidth - 40}]}>
+                            <FontAwesome name = 'search' size = {25} color = 'green' />
+                            <TextInput
+                                placeholder="Enter your wanted product"
+                                editable={false}
+                            />
+                        </View>
+
                     </Pressable>
-                    {searchButton && <SearchBar onPress = { console.log('Handle search algorithm') } windowWidth = {windowWidth} />}
                 </View>
                 <FlatList
                     key = {keyForForceUpdate.toString()}
@@ -75,7 +94,7 @@ const styles = StyleSheet.create({
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0
     },
     searchBar: {
-        width: '100%',
+        width: '45%',
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
@@ -85,6 +104,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingHorizontal: 10,
     },
+    input: {
+        fontSize: 16,
+        width: '100%',
+        paddingVertical: 8,
+        // paddingHorizontal: 12,
+        borderRadius:15,
+        backgroundColor: '#e8e8e8',
+        flexDirection: 'row',
+    }
 });
 
 export default Home;
