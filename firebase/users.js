@@ -42,8 +42,7 @@ async function updateUser(uid, user) {
   const usersColumn = doc(db, "users", uid);
   await updateDoc(usersColumn, {
     name: user.name,
-    phone: user.phone,
-    birthOfDate:user.date
+    phone: user.phone
   });
 }
 
