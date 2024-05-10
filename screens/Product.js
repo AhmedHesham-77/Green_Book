@@ -29,6 +29,7 @@ import {
     BottomSheetBackdrop,
 } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import {router} from "expo-router";
 
 export default function Product({ id }) {
     const [product, setProduct] = useState(null);
@@ -80,6 +81,11 @@ export default function Product({ id }) {
         const getProductById = async () => {
             setLoaded(false);
             const p = await getProduct(id);
+            if (!p) {
+                alert("Product not found");
+                router.navigate("/");
+                return;
+            }
             setProduct(p);
             setLoaded(true);
         };
