@@ -1,14 +1,12 @@
-import { Pressable , StyleSheet , View , Text , Image } from 'react-native';
+import { Pressable , StyleSheet , View , Text , Image, Alert } from 'react-native';
 import { router } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { AntDesign } from '@expo/vector-icons';
-import { ALERT_TYPE , Dialog , AlertNotificationRoot } from 'react-native-alert-notification';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function CartItem ({ product , onDelete }) {
 	return (
 		<Pressable onPress = {() => router.navigate(`product/${product.id}`)} style = {styles.parent} >
-			<AlertNotificationRoot>
 				<View style = {styles.price}>
 					<Ionicons name = 'logo-usd' size = {20} color = 'green' />
 					<Text style = {{ color: 'black' , fontSize: 16 }}> {product.price} </Text>
@@ -27,15 +25,9 @@ export default function CartItem ({ product , onDelete }) {
 					</View>
 						<AntDesign name = 'delete' size = {30} color = 'red' style = {{ marginRight: 25 }} onPress = {() => {
 							onDelete();
-							Dialog.show({
-								type: ALERT_TYPE.SUCCESS,
-								title: 'GREAT!',
-								textBody: 'This product is deleted from your cart.',
-								button: 'OK',
-							});
-						}} />
+                            Alert.alert('Product Deleted.' , 'The product has been successfully deleted.' , [{ text: 'OK'}] );
+                        }} />
 				</View>
-			</AlertNotificationRoot>
 		</Pressable>
 	);
 }

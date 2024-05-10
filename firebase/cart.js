@@ -7,13 +7,13 @@ import {
 
 } from "firebase/firestore";
 
-async function addToCart(uid, product) {
+async function addToCart(uid, product , quantity) {
     try {
 
         const data = {
             productName: product.productName,
             price: product.price,
-            counter: 1,
+            counter: quantity,
             ImageUrl: product.ImageUrl
         }
 

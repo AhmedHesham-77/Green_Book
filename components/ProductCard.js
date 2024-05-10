@@ -21,7 +21,7 @@ const ProductCard = ({ product, onDelete }) => {
             await editFromCart(uid, item);
             return;
         }
-        await addToCart(uid, product);
+        await addToCart(uid, product , 1);
     }
 
     useEffect(() => {

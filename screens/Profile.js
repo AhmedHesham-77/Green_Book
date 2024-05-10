@@ -227,7 +227,8 @@ export default function Profile() {
                     <Button
                         onPress={handlePresentModalPress}
                         title="Edit Profile"
-                        style={styles.buttonText}
+                        textColor= 'white'
+                        styles={{ backgroundColor: 'green' , padding: 15 , marginTop: 20 , borderRadius: 15 }}
                     />
                     <BottomSheetModal
                         ref={bottomSheetModalRef}
@@ -259,12 +260,13 @@ export default function Profile() {
                                 style={{marginRight: 10}}
                                 color="green"
                             />
-                            <BottomSheetTextInput
-                                placeholder="Enter new phone number"
-                                onChangeText={setPhone}
-                            />
+                        <BottomSheetTextInput
+                            placeholder="Enter new phone number"
+                            onChangeText={setPhone}
+                        />
                         </BottomSheetView>
                         <BottomSheetView style={styles.input}>
+                            <Fontisto name="date" size={30} color="green" style = {{ marginRight: 10 }} />
                             {showPicker && (<DateTimePicker
                                 mode="date"
                                 display="spinner"
@@ -283,8 +285,8 @@ export default function Profile() {
                                 />
                             </Pressable>)}
                         </BottomSheetView>
-                        <Pressable onPress={handleUpdate}>
-                            <Text style={styles.buttonText}> Update </Text>
+                        <Pressable style = {{ justifyContent: 'center' , alignItems: 'center' , backgroundColor: 'green' , padding: 15 , marginTop: 10 , borderRadius: 15 , width: '40%' , marginLeft: '30%' }} onPress={handleUpdate}>
+                            <Text style={{ color: 'white' }}> Update </Text>
                         </Pressable>
                     </BottomSheetModal>
                 </BottomSheetModalProvider>

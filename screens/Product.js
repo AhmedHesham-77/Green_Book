@@ -17,7 +17,7 @@ import {
 import { editProduct, getProduct } from "../firebase/products";
 import Loading from "../components/Loading";
 import { Ionicons } from "@expo/vector-icons";
-import { addToCart } from "../firebase/cart";
+import { addToCart, editFromCart, getFromCart } from "../firebase/cart";
 import { addReview, getReview } from "../firebase/products";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import BackButton from "../components/BackButton";
@@ -30,12 +30,14 @@ import {
 } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import {router} from "expo-router";
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 export default function Product({ id }) {
     const [product, setProduct] = useState(null);
     const [loaded, setLoaded] = useState(false);
     const [uid, setUid] = useState("");
     const [review, setReview] = useState(1);
+    const [quantity, setQuantity] = useState(1);
 
     const renderBackdrop = useCallback(function (props) {
         return (
@@ -122,6 +124,18 @@ export default function Product({ id }) {
         handleCloseSheet();
     };
 
+    const handleAddToCart = async () => {
+        const item = await getFromCart(uid, product.id);
+        if (item) {
+            item.counter += quantity;
+            await editFromCart(uid, item);
+            setQuantity(1);
+            return;
+        }
+        await addToCart(uid, product , quantity);
+        setQuantity(1);
+    }
+
     return (
         <GestureHandlerRootView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -146,6 +160,20 @@ export default function Product({ id }) {
                                             ({product.NumberReviews})
                                         </Text>
                                     </View>
+
+
+                                    <View style={{ flex: 1, alignItems: "flex-end" }}>
+                                        <View
+                                            style={{ flexDirection: "row", alignItems: "center" }}
+                                        >
+                                            <AntDesign name="minussquare" size={24} color="green" onPress = {() => {(quantity > 1 ? setQuantity(quantity - 1) : null)}} />
+                                            <Text style={{ color: 'black' , fontSize: 25 , marginLeft: 5 , marginRight: 5 }}>{quantity}</Text>
+                                            <AntDesign name="plussquare" size={24} color="green" onPress = {() => {setQuantity(quantity + 1)}} />
+                                        </View>
+                                    </View>
+
+
+
                                     <View style={{ flex: 1, alignItems: "flex-end" }}>
                                         <View
                                             style={{ flexDirection: "row", alignItems: "center" }}
@@ -214,7 +242,7 @@ export default function Product({ id }) {
                     </BottomSheetView>
                 </BottomSheetModal>
                 <TouchableOpacity
-                    onPress={() => addToCart(uid, product)}
+                    onPress={() => handleAddToCart()}
                     style={styles.addToCartButton}
                 >
                     <Text style={styles.addToCartButtonText}>Add to Cart</Text>

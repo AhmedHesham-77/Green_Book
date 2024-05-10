@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     },
     searchBar: {
         width: '80%',
-        backgroundColor: '#fff',
+        backgroundColor: '#ebebeb',
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
