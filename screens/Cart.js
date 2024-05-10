@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Alert} from 'react-native';
 import React, {useCallback, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {emptyCart, deleteFromCart, getMyCarts} from '../firebase/cart';
@@ -8,6 +8,7 @@ import CartItem from '../components/CartItem';
 import {router, useFocusEffect} from 'expo-router';
 import Button from "../components/Button";
 import {getUser, updateUserBalance} from "../firebase/users";
+import {getProduct} from "../firebase/products";
 
 export default function Cart() {
 
@@ -28,32 +29,41 @@ export default function Cart() {
             setUser(myUser);
             const currentCart = await getMyCarts(userUid);
             setCart(currentCart);
-            //cart.current = currentCart;
-            // setRender(cart.current);
-            console.log(currentCart);
             setLoaded(true);
         } catch (error) {
             console.log(error);
         }
     };
     const handleCheckout = async () => {
+        console.log("cart");
         if (cart.length === 0) {
             alert("Cart is empty");
             return;
         }
         let total = 0;
-        cart.forEach((item) => {
-            total += item.price * item.counter;
-        });
+        for (const item of cart) {
+            const productCheck = await getProduct(item.id);
+            console.log(productCheck);
+            if (!productCheck) {
+                await deleteFromCart(item);
+                const newCart = cart.filter((cartItem) => cartItem.id !== item.id); // Filter based on item.id
+                setCart(newCart);
+            } else {
+                total += item.price * item.counter;
+                console.log(item);
+            }
+        }
 
         if (total > user.balance) {
-            alert("Insufficient balance");
+            Alert.alert("Dont have much balance", "you dont have enough balance to buy these products");
             return;
         }
         const newBalance = user.balance - total;
         await updateUserBalance(uid, newBalance);
         setUser({...user, balance: newBalance});
-        console.log(user);
+        console.log(user)
+        Alert.alert("Successfully", "Your receipt is : " + total.toString() + " $");
+
         await emptyCart(uid);
         router.navigate('(tabs)');
 
