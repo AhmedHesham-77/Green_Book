@@ -1,37 +1,25 @@
 import Loading from '../components/Loading';
 import ProductCard from '../components/ProductCard';
-import React, { useState , useEffect , useCallback } from 'react';
-import {
-    StyleSheet,
-    SafeAreaView,
-    View,
-    StatusBar,
-    FlatList,
-    useWindowDimensions,
-    Platform,
-    Dimensions,
-    Pressable,
-    TextInput
-} from 'react-native';
+import { useState , useEffect , useCallback } from 'react';
+import { StyleSheet , SafeAreaView , View , StatusBar , FlatList , useWindowDimensions , Platform , Dimensions , Pressable , TextInput } from 'react-native';
 import { getProducts } from '../firebase/products';
 import { FontAwesome } from '@expo/vector-icons';
 import {router, useFocusEffect} from 'expo-router';
 import { deleteProduct } from '../firebase/products';
-import Search from "../app/(tabs)/search";
+import { LinearGradient } from 'expo-linear-gradient';
 
 const Home = () => {
 
     const [products , setProducts] = useState([]);
     const [loaded , setLoaded] = useState(false);
-    const windowWidth = useWindowDimensions().width;
     const [keyForForceUpdate , setKeyForForceUpdate] = useState(0);
     const [searchButton , setSearchButton] = useState(false);
+    const windowWidth = useWindowDimensions().width;
 
     const getAllProducts = async () => {
         const newProducts = await getProducts();
         setProducts(newProducts);
         setLoaded(true);
-
     };
 
     const handleScreenResize = useCallback(() => {
@@ -55,31 +43,27 @@ const Home = () => {
         const numColumns = Math.floor(windowWidth / 150);
         return (
             <SafeAreaView style = {[styles.parent , { width: windowWidth }]}>
-                <View style = {styles.searchBar}>
-                    <Pressable style = {{ padding: 15 }} onPress={() => router.navigate('/(tabs)/search')}>
-                        <View style = {[styles.input , { width: windowWidth - 40}]}>
-                            <FontAwesome name = 'search' size = {25} color = 'green' />
-                            <TextInput
-                                placeholder="Enter your wanted product"
-                                editable={false}
-                            />
-                        </View>
-
-                    </Pressable>
-                </View>
-                <FlatList
-                    key = {keyForForceUpdate.toString()}
-                    data = {products}
-                    renderItem = { ({ item }) => <ProductCard product = {item} onDelete = {async () => {
-                        await deleteProduct(item.id);
-                        const newProductList = products.filter((curProduct) => curProduct.id !== item.id);
-                        setProducts(newProductList);
-                    }} />}
-                    keyExtractor = {(item) => item.id}
-                    contentContainerStyle = {styles.cardList}
-                    numColumns = {numColumns}
-                />
-                <StatusBar style = 'auto' />
+                <LinearGradient style = {[styles.parent , { width: windowWidth }]} colors = {['#96df71' , '#5dc87f' , '#3da35d']} start = {{ x: 0.187 , y: 0.378 }} end = {{ x: 1 , y: 1 }} >
+                    <View style = {{ width: '100%' , alignItems: 'center' , justifyContent: 'center' , maxHeight: '10%' , marginBottom: '2.5%' }}>
+                        <Pressable style = {styles.searchBar} onPress = {() => { router.navigate('(tabs)/search'); }}>
+                            <FontAwesome name = 'search' size = {30} color = 'green' style = {{ width: '10%' , paddingVertical: '4%' , marginRight: '3%' }} />
+                            <TextInput placeholder = 'Enter your wanted product' editable = {false} style = {styles.textInput} />
+                        </Pressable>
+                    </View>
+                    <FlatList
+                        key = {keyForForceUpdate.toString()}
+                        data = {products}
+                        renderItem = { ({ item }) => <ProductCard product = {item} onDelete = {async () => {
+                            await deleteProduct(item.id);
+                            const newProductList = products.filter((curProduct) => curProduct.id !== item.id);
+                            setProducts(newProductList);
+                        }} />}
+                        keyExtractor = {(item) => item.id}
+                        contentContainerStyle = {styles.cardList}
+                        numColumns = {numColumns}
+                    />
+                    <StatusBar style = 'auto' />
+                </LinearGradient>
             </SafeAreaView>
         );
     }
@@ -90,54 +74,28 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         justifyContent: 'space-between',
+        alignItems: 'center',
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0
     },
     searchBar: {
-        width: '45%',
+        width: '80%',
+        backgroundColor: '#dadada',
         flexDirection: 'row',
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
         alignItems: 'center',
+        borderRadius: 25,
+        borderWidth: 2,
+        borderColor: 'green',
+    },
+    textInput: {
+        paddingVertical: '4%',
+        width: '70%',
+        fontSize: 16,
     },
     cardList: {
         width: '100%',
-        alignItems: 'center',
         paddingHorizontal: 10,
     },
-    input: {
-        fontSize: 16,
-        width: '100%',
-        paddingVertical: 8,
-        // paddingHorizontal: 12,
-        borderRadius:15,
-        backgroundColor: '#e8e8e8',
-        flexDirection: 'row',
-    }
 });
 
 export default Home;
-
-
-
-
-
-
-// import Button from '../components/Button';
-
-{/* <View style={styles.buttonContainer}>
-    <Button title={"Add Product"} onPress={() => router.navigate('/product')} styles={styles.button} />
-</View> */}
-
-// buttonContainer: {
-//     flexDirection: 'row',
-//     justifyContent: 'center',
-// },
-// button: {
-//     backgroundColor: 'hotpink',
-//     marginHorizontal: 10,
-//     marginBottom: 20,
-//     paddingVertical: 15,
-//     paddingHorizontal: 20,
-//     borderRadius: 8,
-//     alignItems: 'center',
-// }
-// });
