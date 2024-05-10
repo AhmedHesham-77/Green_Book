@@ -12,7 +12,7 @@ const AddProduct = () => {
   const [error, setError] = useState("");
 
   const imageHash = useRef(
-      "https://www12.0zz0.com/2024/05/04/22/650784712.png"
+    "https://www12.0zz0.com/2024/05/04/22/650784712.png"
   );
   const imageUrl = useRef("https://www12.0zz0.com/2024/05/04/22/650784712.png");
   const pickImage = async () => {
@@ -31,8 +31,8 @@ const AddProduct = () => {
   const uploadImageToStorage = async () => {
     try {
       if (
-          imageHash.current !==
-          "https://www12.0zz0.com/2024/05/04/22/650784712.png"
+        imageHash.current !==
+        "https://www12.0zz0.com/2024/05/04/22/650784712.png"
       ) {
         const uri = imageHash.current;
         const filename = uri.split("/").pop();
@@ -60,12 +60,16 @@ const AddProduct = () => {
       setError("Product name must start with a letter");
     } else if (productName.length < 4) {
       setError("Product name must be at least 6 characters");
+    } else if (productName.length > 25) {
+      setError("Product name must be at most 25 characters");
     } else if (!price) {
       setError("Please enter the price name");
     } else if (isNaN(price)) {
       setError("Price must be a number");
     } else if (price < 0) {
       setError("Price should be greater than 0");
+    } else if (price > 99999) {
+      setError("Price should be smaller than than 100000");
     } else {
       try {
         await uploadImageToStorage();
@@ -91,75 +95,75 @@ const AddProduct = () => {
   };
 
   return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Add product</Text>
-        <TextInput
-            placeholder="Enter product name"
-            value={productName}
-            onChangeText={setProductName}
-            style={styles.input}
-        />
-        <TextInput
-            placeholder="Enter price"
-            value={price}
-            onChangeText={setPrice}
-            style={styles.input}
-            keyboardType="numeric"
-        />
+    <View style={styles.container}>
+      <Text style={styles.title}>Add product</Text>
+      <TextInput
+        placeholder="Enter product name"
+        value={productName}
+        onChangeText={setProductName}
+        style={styles.input}
+      />
+      <TextInput
+        placeholder="Enter price"
+        value={price}
+        onChangeText={setPrice}
+        style={styles.input}
+        keyboardType="numeric"
+      />
 
-        <TextInput
-            multiline
-            placeholder="Enter full description"
-            value={description}
-            onChangeText={setDescription}
-            style={styles.description}
-        />
-        <Button title="Add image" onPress={pickImage} />
-        <Button
-            title="Add"
-            textColor="white"
-            onPress={handleAddProduct}
-            styles={({ pressed }) => [
-              { opacity: pressed ? 0.2 : 1 },
-              {
-                justifyContent: "center",
-                alignItems: "center",
-                borderWidth: 1,
-                borderColor: "#a4ed80",
-                paddingVertical: 12,
-                paddingHorizontal: 20,
-                marginTop: 30,
-                marginBottom: 20,
-                width: "80%",
-                borderRadius: 10,
-                backgroundColor: "#246c3a",
-              },
-            ]}
-        />
-        <Button
-            title="Clear"
-            textColor="white"
-            onPress={clearData}
-            styles={({ pressed }) => [
-              { opacity: pressed ? 0.2 : 1 },
-              {
-                justifyContent: "center",
-                alignItems: "center",
-                borderWidth: 1,
-                borderColor: "#a4ed80",
-                paddingVertical: 12,
-                paddingHorizontal: 20,
-                marginTop: 30,
-                marginBottom: 20,
-                width: "40%",
-                borderRadius: 10,
-                backgroundColor: "#bd0e13",
-              },
-            ]}
-        />
+      <TextInput
+        multiline
+        placeholder="Enter full description"
+        value={description}
+        onChangeText={setDescription}
+        style={styles.description}
+      />
+      <Button title="Add image" onPress={pickImage} />
+      <Button
+        title="Add"
+        textColor="white"
+        onPress={handleAddProduct}
+        styles={({ pressed }) => [
+          { opacity: pressed ? 0.2 : 1 },
+          {
+            justifyContent: "center",
+            alignItems: "center",
+            borderWidth: 1,
+            borderColor: "#a4ed80",
+            paddingVertical: 12,
+            paddingHorizontal: 20,
+            marginTop: 30,
+            marginBottom: 20,
+            width: "80%",
+            borderRadius: 10,
+            backgroundColor: "#246c3a",
+          },
+        ]}
+      />
+      <Button
+        title="Clear"
+        textColor="white"
+        onPress={clearData}
+        styles={({ pressed }) => [
+          { opacity: pressed ? 0.2 : 1 },
+          {
+            justifyContent: "center",
+            alignItems: "center",
+            borderWidth: 1,
+            borderColor: "#a4ed80",
+            paddingVertical: 12,
+            paddingHorizontal: 20,
+            marginTop: 30,
+            marginBottom: 20,
+            width: "40%",
+            borderRadius: 10,
+            backgroundColor: "#bd0e13",
+          },
+        ]}
+      />
 
-        {error ? <Text style={styles.error}>{error}</Text> : null}
-      </View>
+      {error ? <Text style={styles.error}>{error}</Text> : null}
+    </View>
   );
 };
 export default AddProduct;

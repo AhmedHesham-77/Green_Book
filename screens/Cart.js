@@ -11,8 +11,6 @@ import {
     useWindowDimensions,
     Platform,
     Dimensions,
-    Pressable,
-    TextInput,
     Alert
 } from 'react-native';
 import {useCallback, useEffect, useState} from 'react';
@@ -59,7 +57,7 @@ export default function Cart() {
             console.log(productCheck);
             if (!productCheck) {
                 await deleteFromCart(item);
-                const newCart = cart.filter((cartItem) => cartItem.id !== item.id); // Filter based on item.id
+                const newCart = cart.filter((cartItem) => cartItem.id !== item.id);
                 setCart(newCart);
             } else {
                 total += item.price * item.counter;

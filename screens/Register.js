@@ -25,8 +25,6 @@ const Register = () => {
     const [showPicker, setShowPicker] = useState(false);
     const [dateOfBirth, setDateOfBirth] = useState("");
     const [dateChanged, setDateChanged] = useState(false);
-
-    // set max year 10 years from current date
     const currentDate = new Date();
     const maxDate = new Date();
     maxDate.setFullYear(currentDate.getFullYear() - 10);
@@ -66,7 +64,7 @@ const Register = () => {
     const handlePress = async () => {
         const isValidName = /^[a-zA-Z\s]*$/.test(name)
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const myEmail = email.trim(); // Trim the email
+        const myEmail = email.trim();
 
 
         if (!myEmail || !password) return setError("Email and password are required");

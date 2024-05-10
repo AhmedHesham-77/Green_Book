@@ -1,9 +1,7 @@
 import {
     StyleSheet,
     Text,
-    View,
     SafeAreaView,
-    Pressable,
     Image,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";

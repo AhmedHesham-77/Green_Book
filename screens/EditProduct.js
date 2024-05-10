@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { View, TextInput, Text, StyleSheet } from "react-native";
+import { View, TextInput, Text, Alert, StyleSheet } from "react-native";
 import Button from "../components/Button";
 import { deleteProduct, editProduct, getProduct } from "../firebase/products";
 import { uploadImage } from "../firebase/config";
@@ -12,7 +12,6 @@ const EditProduct = ({ id }) => {
   const [loaded, setLoaded] = useState(false);
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
-  const [productQuantity, setProductQuantity] = useState("");
   const [error, setError] = useState("");
 
   const imageHash = useRef(
@@ -39,7 +38,6 @@ const EditProduct = ({ id }) => {
   const getProductById = async () => {
     setLoaded(false);
     const p = await getProduct(id);
-    //check if the product is existed
     if (!p) {
       router.navigate("(tabs)");
     } else {
@@ -47,7 +45,6 @@ const EditProduct = ({ id }) => {
       setProductName(p.productName);
       setPrice(p.price.toString());
       setDescription(p.description);
-      setProductQuantity(p.Quantity.toString());
       setLoaded(true);
     }
   };
@@ -77,25 +74,22 @@ const EditProduct = ({ id }) => {
       setError("Product name must start with a letter");
     } else if (productName.length < 4) {
       setError("Product name must be at least 6 characters");
+    } else if (productName.length > 25) {
+      setError("Product name must be at most 25 characters");
     } else if (!price) {
       setError("Please enter the price name");
     } else if (isNaN(price)) {
       setError("Price must be a number");
     } else if (price < 0) {
       setError("Price should be greater than 0");
-    } else if (!productQuantity) {
-      setError("Please enter quantity");
-    } else if (isNaN(productQuantity)) {
-      setError("Quantity must be a number");
-    } else if (productQuantity < 0) {
-      setError("quantity should be greater than 0");
+    } else if (price > 99999) {
+      setError("Price should be smaller than than 100000");
     } else {
       try {
         await uploadImageToStorage();
         const product0 = {
           productName: productName,
           price: Number(price),
-          Quantity: Number(productQuantity),
           description: description,
           ImageUrl: imageUrl.current,
           id: product.id,
@@ -104,7 +98,19 @@ const EditProduct = ({ id }) => {
         };
         await editProduct(product0);
         setProduct(product0);
-        alert("Product edited successfully.");
+        Alert.alert(
+          "Product Updated.",
+          "The product has been successfully updated.",
+          [
+            {
+              text: "OK",
+              onPress: () => console.log("OK Pressed"),
+              style: "default",
+              color: "green",
+            },
+          ]
+        );
+        router.navigate("(tabs)");
       } catch (err) {
         setError(err.message);
         console.log(err);
@@ -129,13 +135,6 @@ const EditProduct = ({ id }) => {
           placeholder="Enter price"
           value={price}
           onChangeText={setPrice}
-          style={styles.input}
-          inputMode="numeric"
-        />
-        <TextInput
-          placeholder="Enter quantity"
-          value={productQuantity}
-          onChangeText={setProductQuantity}
           style={styles.input}
           inputMode="numeric"
         />

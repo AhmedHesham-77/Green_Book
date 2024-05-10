@@ -1,7 +1,6 @@
 import React from "react";
 import { Pressable, Text } from "react-native";
 import { router } from "expo-router";
-// import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { Ionicons } from '@expo/vector-icons';
 
 function BackButton() {

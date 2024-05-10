@@ -21,7 +21,6 @@ export default function MyButton({onPress, style, children, color}){
 
 const styles = StyleSheet.create({
   wrapperCustom: {
-    // flex: 1,
     alignItems: "center",
     justifyContent:"center",
     borderRadius: 2,

@@ -1,11 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  Pressable,
-  Image,
-} from "react-native";
+import { StyleSheet, Text, SafeAreaView, Image } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";

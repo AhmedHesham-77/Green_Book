@@ -14,7 +14,7 @@ const Login = () => {
 
     const handleLogin = async () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const myEmail = email.trim(); // Trim the email
+        const myEmail = email.trim();
 
         if (!myEmail || !password) return setError("Email and password are required");
         else if (password.length < 6)

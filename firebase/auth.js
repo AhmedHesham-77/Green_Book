@@ -39,7 +39,7 @@ async function register(username, email, phone, password, date) {
         balance: 100,
     });
 
-    return credentials; // return some 'credentials' of the created user.
+    return credentials;
 }
 
 

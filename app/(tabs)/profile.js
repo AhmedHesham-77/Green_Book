@@ -1,6 +1,4 @@
-import { View, Text } from "react-native";
 import { useEffect, useState } from "react";
-
 import Profile from "../../screens/Profile";
 import Loading from "../../components/Loading";
 import { onAuthStateChanged } from "firebase/auth";

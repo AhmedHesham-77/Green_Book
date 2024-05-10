@@ -5,8 +5,6 @@ import {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {getUser} from "../../firebase/users";
 import AntDesign from "@expo/vector-icons/AntDesign";
-import { BlurView } from 'expo-blur';
-
 export default function TabsLayout() {
     const [image, setImage] = useState("");
     const [role, setRole] = useState("");
@@ -33,8 +31,6 @@ export default function TabsLayout() {
                 tabBarInactiveTintColor: "black",
                 tabBarStyle: {
                     height: 60,
-                    // borderTopRightRadius: 25,
-                    // borderTopLeftRadius: 25,
                 },
             }}
         >
