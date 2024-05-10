@@ -29,7 +29,7 @@ export default function Search() {
     }, []);
 
     const searchItems = (searchFor) => {
-        setSearchData(Data.filter((item) => item.productName.includes(searchFor)));
+        setSearchData(Data.filter((item) => item.productName.toLowerCase().includes(searchFor.toLowerCase())));
     };
 
     return (
@@ -47,7 +47,7 @@ export default function Search() {
                 data={searchData}
                 renderItem={({item}) => <ProductSearch {...item}/>}
                 style={{width: '100%'}}
-                contentContainerStyle = {styles.flatList}
+                contentContainerStyle={styles.flatList}
                 showsHorizontalScrollIndicator={false}
                 showsVerticalScrollIndicator={false}
             />
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
         paddingVertical: 20,
         alignItems: "center",
         height: '100vh',
-        width:'100%'
+        width: '100%'
     },
     input: {
         flexDirection: "row",
