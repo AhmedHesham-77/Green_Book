@@ -1,7 +1,8 @@
 import React from "react";
 import { Pressable, Text } from "react-native";
 import { router } from "expo-router";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+// import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import { Ionicons } from '@expo/vector-icons';
 
 function BackButton() {
   return (
@@ -11,19 +12,18 @@ function BackButton() {
       }}
       style={{
         position: "absolute",
-        top: 20,
-        left: 20,
+        top: 35,
+        left: 15,
         justifyContent: "center",
         alignItems: "center",
-        borderWidth: 3,
-        borderColor: "#a4ed80",
-        paddingVertical: 12,
-        paddingHorizontal: 20,
-        borderRadius: 2,
+        backgroundColor:'rgba(0,0,0,0.85)',
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+        borderRadius: 10,
         zIndex: 100,
       }}
     >
-      <MaterialCommunityIcons name="backburger" size={30} color="black" />
+      <Ionicons name="arrow-back-sharp" size={24} color="white" />
     </Pressable>
   );
 }
