@@ -2,27 +2,32 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Pressable} from "react-native";
 import {editProduct, getProduct} from "../firebase/products";
 import Loading from "../components/Loading";
-import {Feather, FontAwesome, FontAwesome5, Ionicons} from "@expo/vector-icons";
+import {Ionicons} from "@expo/vector-icons";
 import {addToCart} from "../firebase/cart";
 import {addReview, getReview} from "../firebase/products";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import BackButton from "../components/BackButton";
 import {getUser} from "../firebase/users";
-import BottomSheet, {
+import {
     BottomSheetModal,
     BottomSheetView,
     BottomSheetModalProvider,
     BottomSheetBackdrop,
-    BottomSheetTextInput,
 } from "@gorhom/bottom-sheet";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
-import Button from "../components/Button";
 
 export default function Product({id}) {
     const [product, setProduct] = useState(null);
     const [loaded, setLoaded] = useState(false);
     const [uid, setUid] = useState("");
     const [review, setReview] = useState(1);
+
+    const renderBackdrop = useCallback(
+        function (props) {
+            return <BottomSheetBackdrop appearsOnIndex={0} disappearsOnIndex={-1} {...props} />;
+        },
+        []
+    );
 
     const bottomSheetModalRef = useRef(null);
     const snapPoints = useMemo(() => ["30%", "40%"], []);
@@ -44,7 +49,7 @@ export default function Product({id}) {
             try {
                 const user = await AsyncStorage.getItem("user");
                 const userUid = JSON.parse(user).uid;
-                console.log(userUid)
+                setUid(userUid)
                 const userData = await getUser(userUid)
                 balance.current = userData.balance;
             } catch (error) {
@@ -116,18 +121,14 @@ export default function Product({id}) {
                                         </Text>
                                     </View>
                                     <View style={{flex: 1, alignItems: 'flex-end'}}>
-                                        <View style={{flexDirection: 'row'}}>
+                                        <View style={{flexDirection: 'row',alignItems:'center'}}>
                                             <Ionicons
                                                 name="logo-usd"
-                                                size={18}
+                                                size={25}
                                                 color="green"
                                                 style={styles.priceIcon}
                                             />
                                             <Text style={styles.price}>{product.price}</Text>
-                                        </View>
-                                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                                            <FontAwesome5 name="coins" size={30} color="orange"/>
-                                            <Text style={styles.price}>{balance.current}</Text>
                                         </View>
                                     </View>
                                 </View>
@@ -145,7 +146,7 @@ export default function Product({id}) {
             <BottomSheetModalProvider>
                 <TouchableOpacity
                     onPress={handlePresentModalPress}
-                    style={[styles.addToCartButton, {marginBottom: 10}]}
+                    style={[styles.ReviewButton, {marginBottom: 10}]}
                 >
                     <Text style={styles.addToCartButtonText}>Review</Text>
                 </TouchableOpacity>
@@ -156,6 +157,7 @@ export default function Product({id}) {
                     onChange={handleSheetChanges}
                     enablePanDownToClose={true}
                     backgroundStyle={{backgroundColor: "white"}}
+                    backdropComponent={renderBackdrop}
                 >
                     <BottomSheetView style={styles.contentContainer}>
                         <Text style={styles.contentContainerText}>Review </Text>
@@ -174,8 +176,8 @@ export default function Product({id}) {
                                 </TouchableOpacity>
                             ))}
                         </BottomSheetView>
-                        <Pressable onPress={() => handleCloseSheet()}>
-                            <Text>Submit</Text>
+                        <Pressable onPress={() => handleReview()}>
+                            <Text style={{fontSize: 16}}>Submit</Text>
                         </Pressable>
                     </BottomSheetView>
                 </BottomSheetModal>
@@ -208,16 +210,16 @@ const styles = StyleSheet.create({
     },
     infoContainer: {
         position: 'absolute',
-        bottom: 120,
-        // flexDirection: 'row',
+        top: 260,
         justifyContent: 'space-between',
         width: '100%',
         padding: 15,
         paddingHorizontal: 30,
-        fontSize: 22,
+        fontSize: 18,
         fontWeight: 'bold',
         backgroundColor: 'rgba(227,227,227,0.85)',
         borderRadius: 20,
+        zIndex: 100,
     },
     title: {
         fontSize: 24,
@@ -234,13 +236,22 @@ const styles = StyleSheet.create({
         marginRight: 5,
     },
     price: {
-        fontSize: 20,
+        fontSize: 25,
         color: "green",
     },
     descriptionText: {
         fontSize: 16,
         color: "#666",
         marginBottom: 20,
+    },
+    ReviewButton: {
+        backgroundColor: "#FFD700",
+        padding: 15,
+        borderRadius: 10,
+        alignItems: "center",
+        alignSelf: 'center',
+        width: '90%',
+        marginBottom: 10
     },
     addToCartButton: {
         backgroundColor: "#246c3a",
@@ -268,8 +279,9 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     contentContainerText: {
-        fontSize: 20,
+        fontSize: 24,
         fontWeight: "bold",
-        margin: 10,
+        marginBottom: 20,
+        marginTop: 5
     }
 });
