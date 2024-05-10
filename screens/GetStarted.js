@@ -49,7 +49,6 @@ export default function GetStarted() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
   },
   linearGradient: {
     flex: 1,
@@ -64,13 +63,11 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto",
   },
   title: {
-    fontFamily: "Gabarito,cursive",
     fontSize: 52,
     fontWeight: "bold",
     color: "#ffffff",
   },
   subtitle: {
-    fontFamily: "Gabarito,cursive",
     fontSize: 22,
     color: "#1c2e44",
   },

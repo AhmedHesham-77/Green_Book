@@ -104,7 +104,6 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
   },
   title: {
-    fontFamily: "Gabarito,cursive",
     fontSize: 45,
     fontWeight: "bold",
     color: "#ffffff",

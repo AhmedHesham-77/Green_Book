@@ -199,7 +199,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     title: {
-        fontFamily: "Gabarito,cursive",
         fontSize: 52,
         fontWeight: "bold",
         color: "#ffffff",

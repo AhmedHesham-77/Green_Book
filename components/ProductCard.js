@@ -56,56 +56,58 @@ const ProductCard = ({ product, onDelete }) => {
       style={styles.parent}
     >
       <AlertNotificationRoot>
-      <View style={styles.container}>
-        <View style={styles.rate}>
-          <Text style={{ color: "black", fontSize: 16 }}>
-            {product.NumberReviews
-              ? Math.ceil((product.TotalReviews / product.NumberReviews) * 10) /
-                10
-              : 0}
-          </Text>
-          <Ionicons name="star" size={20} color="#FFD700" />
-        </View>
-        {role === true ? (
-          <OptionsList onDelete={onDelete} product={product} />
-        ) : null}
-        <Image source={{ uri: product.ImageUrl }} style={styles.image} />
-        <Text style={styles.title}>
-          {product.productName.length > 30
-            ? product.productName.substring(0, 30)
-            : product.productName}
-          <Text style={{ color: "limegreen" }}>
-            {product.productName.length > 30 ? " ... " : ""}
-          </Text>
-        </Text>
-        <View style={styles.bottomContainer}>
-          <Pressable
-            onPress={() => {
-              handleAddToCart();
-              Dialog.show({
-                  type: ALERT_TYPE.SUCCESS,
-                  title: 'GREAT!',
-                  textBody: 'This product is added to your cart.',
-                  button: 'OK',
-              });
-            }}
-          >
-            <Feather name="shopping-cart" size={29} color="black" />
-          </Pressable>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Ionicons
-              name="logo-usd"
-              size={20}
-              color="green"
-              style={{ marginRight: -5 }}
-            />
-            <Text style={{ fontSize: 18, fontWeight: "bold", color: "green" }}>
-              {" "}
-              {product.price}{" "}
+        <View style={styles.container}>
+          <View style={styles.rate}>
+            <Text style={{ color: "black", fontSize: 16 }}>
+              {product.NumberReviews
+                ? Math.ceil(
+                    (product.TotalReviews / product.NumberReviews) * 10
+                  ) / 10
+                : 0}
             </Text>
+            <Ionicons name="star" size={20} color="#FFD700" />
+          </View>
+          {role === true ? (
+            <OptionsList onDelete={onDelete} product={product} />
+          ) : null}
+          <Image source={{ uri: product.ImageUrl }} style={styles.image} />
+          <Text style={styles.title}>
+            {product.productName.length > 30
+              ? product.productName.substring(0, 30)
+              : product.productName}
+            <Text style={{ color: "limegreen" }}>
+              {product.productName.length > 30 ? " ... " : ""}
+            </Text>
+          </Text>
+          <View style={styles.bottomContainer}>
+            <Pressable
+              onPress={() => {
+                handleAddToCart();
+                Dialog.show({
+                  type: ALERT_TYPE.SUCCESS,
+                  title: "GREAT!",
+                  textBody: "This product is added to your cart.",
+                  button: "OK",
+                });
+              }}
+            >
+              <Feather name="shopping-cart" size={29} color="black" />
+            </Pressable>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Ionicons
+                name="logo-usd"
+                size={20}
+                color="green"
+                style={{ marginRight: -5 }}
+              />
+              <Text
+                style={{ fontSize: 18, fontWeight: "bold", color: "green" }}
+              >
+                {product.price}
+              </Text>
+            </View>
           </View>
         </View>
-      </View>
       </AlertNotificationRoot>
     </Pressable>
   );
