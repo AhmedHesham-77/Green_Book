@@ -55,7 +55,7 @@ const ProductCard = ({ product, onDelete }) => {
       onPress={() => router.navigate(`product/${product.id}`)}
       style={styles.parent}
     >
-      {/* <AlertNotificationRoot> */}
+      <AlertNotificationRoot>
       <View style={styles.container}>
         <View style={styles.rate}>
           <Text style={{ color: "black", fontSize: 16 }}>
@@ -82,12 +82,12 @@ const ProductCard = ({ product, onDelete }) => {
           <Pressable
             onPress={() => {
               handleAddToCart();
-              // Dialog.show({
-              //     type: ALERT_TYPE.SUCCESS,
-              //     title: 'GREAT!',
-              //     textBody: 'This product is added to your cart.',
-              //     button: 'OK',
-              // });
+              Dialog.show({
+                  type: ALERT_TYPE.SUCCESS,
+                  title: 'GREAT!',
+                  textBody: 'This product is added to your cart.',
+                  button: 'OK',
+              });
             }}
           >
             <Feather name="shopping-cart" size={29} color="black" />
@@ -106,7 +106,7 @@ const ProductCard = ({ product, onDelete }) => {
           </View>
         </View>
       </View>
-      {/* </AlertNotificationRoot> */}
+      </AlertNotificationRoot>
     </Pressable>
   );
 };
