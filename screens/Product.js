@@ -83,7 +83,7 @@ export default function Product({ id }) {
             const p = await getProduct(id);
             if (!p) {
                 alert("Product not found");
-                router.navigate("/");
+                router.navigate("(tabs)");
                 return;
             }
             setProduct(p);
