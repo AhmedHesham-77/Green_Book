@@ -9,11 +9,10 @@ const AddProduct = () => {
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
-  const [productQuantity, setProductQuantity] = useState("");
   const [error, setError] = useState("");
 
   const imageHash = useRef(
-    "https://www12.0zz0.com/2024/05/04/22/650784712.png"
+      "https://www12.0zz0.com/2024/05/04/22/650784712.png"
   );
   const imageUrl = useRef("https://www12.0zz0.com/2024/05/04/22/650784712.png");
   const pickImage = async () => {
@@ -32,8 +31,8 @@ const AddProduct = () => {
   const uploadImageToStorage = async () => {
     try {
       if (
-        imageHash.current !==
-        "https://www12.0zz0.com/2024/05/04/22/650784712.png"
+          imageHash.current !==
+          "https://www12.0zz0.com/2024/05/04/22/650784712.png"
       ) {
         const uri = imageHash.current;
         const filename = uri.split("/").pop();
@@ -49,10 +48,9 @@ const AddProduct = () => {
   const clearData = () => {
     setProductName("");
     setPrice("");
-    setProductQuantity("");
     setDescription("");
-    // imageHash.current = '../assets/favicon.jpg';
-    // imageUrl.current = '../assets/favicon.jpg';
+    imageHash.current = "https://www12.0zz0.com/2024/05/04/22/650784712.png";
+    imageUrl.current = "https://www12.0zz0.com/2024/05/04/22/650784712.png";
   };
   const handleAddProduct = async () => {
     setError("");
@@ -68,19 +66,12 @@ const AddProduct = () => {
       setError("Price must be a number");
     } else if (price < 0) {
       setError("Price should be greater than 0");
-    } else if (!productQuantity) {
-      setError("Please enter quantity");
-    } else if (isNaN(productQuantity)) {
-      setError("Quantity must be a number");
-    } else if (productQuantity < 0) {
-      setError("quantity should be greater than 0");
     } else {
       try {
         await uploadImageToStorage();
         const product = {
           productName: productName,
           price: Number(price),
-          Quantity: Number(productQuantity),
           description: description,
           ImageUrl: imageUrl.current,
           TotalReviews: 0,
@@ -100,81 +91,75 @@ const AddProduct = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Add product</Text>
-      <TextInput
-        placeholder="Enter product name"
-        value={productName}
-        onChangeText={setProductName}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Enter price"
-        value={price}
-        onChangeText={setPrice}
-        style={styles.input}
-        keyboardType="numeric"
-      />
-      <TextInput
-        placeholder="Enter quantity"
-        value={productQuantity}
-        onChangeText={setProductQuantity}
-        style={styles.input}
-        keyboardType="numeric"
-      />
-      <TextInput
-        multiline
-        placeholder="Enter full description"
-        value={description}
-        onChangeText={setDescription}
-        style={styles.description}
-      />
-      <Button title="Add image" onPress={pickImage} />
-      <Button
-        title="Add"
-        textColor="white"
-        onPress={handleAddProduct}
-        styles={({ pressed }) => [
-          { opacity: pressed ? 0.2 : 1 },
-          {
-            justifyContent: "center",
-            alignItems: "center",
-            borderWidth: 1,
-            borderColor: "#a4ed80",
-            paddingVertical: 12,
-            paddingHorizontal: 20,
-            marginTop: 30,
-            marginBottom: 20,
-            width: "80%",
-            borderRadius: 10,
-            backgroundColor: "#246c3a",
-          },
-        ]}
-      />
-      <Button
-        title="Clear"
-        textColor="white"
-        onPress={clearData}
-        styles={({ pressed }) => [
-          { opacity: pressed ? 0.2 : 1 },
-          {
-            justifyContent: "center",
-            alignItems: "center",
-            borderWidth: 1,
-            borderColor: "#a4ed80",
-            paddingVertical: 12,
-            paddingHorizontal: 20,
-            marginTop: 30,
-            marginBottom: 20,
-            width: "40%",
-            borderRadius: 10,
-            backgroundColor: "#bd0e13",
-          },
-        ]}
-      />
+      <View style={styles.container}>
+        <Text style={styles.title}>Add product</Text>
+        <TextInput
+            placeholder="Enter product name"
+            value={productName}
+            onChangeText={setProductName}
+            style={styles.input}
+        />
+        <TextInput
+            placeholder="Enter price"
+            value={price}
+            onChangeText={setPrice}
+            style={styles.input}
+            keyboardType="numeric"
+        />
 
-      {error ? <Text style={styles.error}>{error}</Text> : null}
-    </View>
+        <TextInput
+            multiline
+            placeholder="Enter full description"
+            value={description}
+            onChangeText={setDescription}
+            style={styles.description}
+        />
+        <Button title="Add image" onPress={pickImage} />
+        <Button
+            title="Add"
+            textColor="white"
+            onPress={handleAddProduct}
+            styles={({ pressed }) => [
+              { opacity: pressed ? 0.2 : 1 },
+              {
+                justifyContent: "center",
+                alignItems: "center",
+                borderWidth: 1,
+                borderColor: "#a4ed80",
+                paddingVertical: 12,
+                paddingHorizontal: 20,
+                marginTop: 30,
+                marginBottom: 20,
+                width: "80%",
+                borderRadius: 10,
+                backgroundColor: "#246c3a",
+              },
+            ]}
+        />
+        <Button
+            title="Clear"
+            textColor="white"
+            onPress={clearData}
+            styles={({ pressed }) => [
+              { opacity: pressed ? 0.2 : 1 },
+              {
+                justifyContent: "center",
+                alignItems: "center",
+                borderWidth: 1,
+                borderColor: "#a4ed80",
+                paddingVertical: 12,
+                paddingHorizontal: 20,
+                marginTop: 30,
+                marginBottom: 20,
+                width: "40%",
+                borderRadius: 10,
+                backgroundColor: "#bd0e13",
+              },
+            ]}
+        />
+
+        {error ? <Text style={styles.error}>{error}</Text> : null}
+      </View>
   );
 };
 export default AddProduct;

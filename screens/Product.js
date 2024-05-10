@@ -1,33 +1,50 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
-import {View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Pressable} from "react-native";
-import {editProduct, getProduct} from "../firebase/products";
+import React, {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
+import {
+    View,
+    Text,
+    StyleSheet,
+    Image,
+    TouchableOpacity,
+    ScrollView,
+    Pressable,
+} from "react-native";
+import { editProduct, getProduct } from "../firebase/products";
 import Loading from "../components/Loading";
-import {Ionicons} from "@expo/vector-icons";
-import {addToCart} from "../firebase/cart";
-import {addReview, getReview} from "../firebase/products";
+import { Ionicons } from "@expo/vector-icons";
+import { addToCart } from "../firebase/cart";
+import { addReview, getReview } from "../firebase/products";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import BackButton from "../components/BackButton";
-import {getUser} from "../firebase/users";
+import { getUser } from "../firebase/users";
 import {
     BottomSheetModal,
     BottomSheetView,
     BottomSheetModalProvider,
     BottomSheetBackdrop,
 } from "@gorhom/bottom-sheet";
-import {GestureHandlerRootView} from "react-native-gesture-handler";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-export default function Product({id}) {
+export default function Product({ id }) {
     const [product, setProduct] = useState(null);
     const [loaded, setLoaded] = useState(false);
     const [uid, setUid] = useState("");
     const [review, setReview] = useState(1);
 
-    const renderBackdrop = useCallback(
-        function (props) {
-            return <BottomSheetBackdrop appearsOnIndex={0} disappearsOnIndex={-1} {...props} />;
-        },
-        []
-    );
+    const renderBackdrop = useCallback(function (props) {
+        return (
+            <BottomSheetBackdrop
+                appearsOnIndex={0}
+                disappearsOnIndex={-1}
+                {...props}
+            />
+        );
+    }, []);
 
     const bottomSheetModalRef = useRef(null);
     const snapPoints = useMemo(() => ["30%", "40%"], []);
@@ -49,8 +66,8 @@ export default function Product({id}) {
             try {
                 const user = await AsyncStorage.getItem("user");
                 const userUid = JSON.parse(user).uid;
-                setUid(userUid)
-                const userData = await getUser(userUid)
+                setUid(userUid);
+                const userData = await getUser(userUid);
                 balance.current = userData.balance;
             } catch (error) {
                 console.log(error);
@@ -67,6 +84,7 @@ export default function Product({id}) {
             setLoaded(true);
         };
         getProductById();
+        setReview(1);
     }, [id]);
 
     const handleStarClick = (rating) => {
@@ -95,7 +113,7 @@ export default function Product({id}) {
             setProduct(product0);
             await addReview(product.id, uid);
         }
-        handleCloseSheet()
+        handleCloseSheet();
     };
 
     return (
@@ -103,14 +121,16 @@ export default function Product({id}) {
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 {loaded ? (
                     <View>
-                        <BackButton/>
-                        <Image source={{uri: product.ImageUrl}} style={styles.image}/>
+                        <BackButton />
+                        <Image source={{ uri: product.ImageUrl }} style={styles.image} />
                         <View style={styles.infoContainer}>
-                            <View style={{flexDirection: 'column', justifyContent: 'center'}}>
+                            <View
+                                style={{ flexDirection: "column", justifyContent: "center" }}
+                            >
                                 <Text style={styles.title}>{product.productName}</Text>
-                                <View style={{flexDirection: 'row'}}>
+                                <View style={{ flexDirection: "row" }}>
                                     <View style={styles.priceContainer}>
-                                        <Ionicons name="star" size={24} color="#FFD700"/>
+                                        <Ionicons name="star" size={24} color="#FFD700" />
                                         <Text style={styles.price}>
                                             {product.NumberReviews
                                                 ? Math.ceil(
@@ -120,8 +140,10 @@ export default function Product({id}) {
                                             ({product.NumberReviews})
                                         </Text>
                                     </View>
-                                    <View style={{flex: 1, alignItems: 'flex-end'}}>
-                                        <View style={{flexDirection: 'row',alignItems:'center'}}>
+                                    <View style={{ flex: 1, alignItems: "flex-end" }}>
+                                        <View
+                                            style={{ flexDirection: "row", alignItems: "center" }}
+                                        >
                                             <Ionicons
                                                 name="logo-usd"
                                                 size={25}
@@ -135,18 +157,22 @@ export default function Product({id}) {
                             </View>
                         </View>
                         <View style={styles.description}>
-                            <Text style={{fontSize: 25, fontWeight: 'bold', marginBottom: 5}}>Description</Text>
+                            <Text
+                                style={{ fontSize: 25, fontWeight: "bold", marginBottom: 5 }}
+                            >
+                                Description
+                            </Text>
                             <Text style={styles.descriptionText}>{product.description}</Text>
                         </View>
                     </View>
                 ) : (
-                    <Loading/>
+                    <Loading />
                 )}
             </ScrollView>
             <BottomSheetModalProvider>
                 <TouchableOpacity
                     onPress={handlePresentModalPress}
-                    style={[styles.ReviewButton, {marginBottom: 10}]}
+                    style={[styles.ReviewButton, { marginBottom: 10 }]}
                 >
                     <Text style={styles.addToCartButtonText}>Review</Text>
                 </TouchableOpacity>
@@ -156,7 +182,7 @@ export default function Product({id}) {
                     snapPoints={snapPoints}
                     onChange={handleSheetChanges}
                     enablePanDownToClose={true}
-                    backgroundStyle={{backgroundColor: "white"}}
+                    backgroundStyle={{ backgroundColor: "white" }}
                     backdropComponent={renderBackdrop}
                 >
                     <BottomSheetView style={styles.contentContainer}>
@@ -177,7 +203,7 @@ export default function Product({id}) {
                             ))}
                         </BottomSheetView>
                         <Pressable onPress={() => handleReview()}>
-                            <Text style={{fontSize: 16}}>Submit</Text>
+                            <Text style={{ fontSize: 16 }}>Submit</Text>
                         </Pressable>
                     </BottomSheetView>
                 </BottomSheetModal>
@@ -209,15 +235,15 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 10,
     },
     infoContainer: {
-        position: 'absolute',
+        position: "absolute",
         top: 260,
-        justifyContent: 'space-between',
-        width: '100%',
+        justifyContent: "space-between",
+        width: "100%",
         padding: 15,
         paddingHorizontal: 30,
         fontSize: 18,
-        fontWeight: 'bold',
-        backgroundColor: 'rgba(227,227,227,0.85)',
+        fontWeight: "bold",
+        backgroundColor: "rgba(227,227,227,0.85)",
         borderRadius: 20,
         zIndex: 100,
     },
@@ -249,18 +275,18 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 10,
         alignItems: "center",
-        alignSelf: 'center',
-        width: '90%',
-        marginBottom: 10
+        alignSelf: "center",
+        width: "90%",
+        marginBottom: 10,
     },
     addToCartButton: {
         backgroundColor: "#246c3a",
         padding: 15,
         borderRadius: 10,
         alignItems: "center",
-        alignSelf: 'center',
-        width: '90%',
-        marginBottom: 10
+        alignSelf: "center",
+        width: "90%",
+        marginBottom: 10,
     },
     addToCartButtonText: {
         color: "#fff",
@@ -273,15 +299,17 @@ const styles = StyleSheet.create({
     },
     starButton: {
         marginRight: 5,
-    }, description: {
-        paddingHorizontal: 10
-    }, contentContainer: {
+    },
+    description: {
+        paddingHorizontal: 10,
+    },
+    contentContainer: {
         alignItems: "center",
     },
     contentContainerText: {
         fontSize: 24,
         fontWeight: "bold",
         marginBottom: 20,
-        marginTop: 5
-    }
+        marginTop: 5,
+    },
 });
