@@ -11,10 +11,8 @@ const AddProduct = () => {
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
 
-  const imageHash = useRef(
-    "https://www12.0zz0.com/2024/05/04/22/650784712.png"
-  );
-  const imageUrl = useRef("https://www12.0zz0.com/2024/05/04/22/650784712.png");
+  const imageHash = useRef("https://www9.0zz0.com/2024/05/10/19/728774942.png");
+  const imageUrl = useRef("https://www9.0zz0.com/2024/05/10/19/728774942.png");
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -32,7 +30,7 @@ const AddProduct = () => {
     try {
       if (
         imageHash.current !==
-        "https://www12.0zz0.com/2024/05/04/22/650784712.png"
+        "https://www9.0zz0.com/2024/05/10/19/728774942.png"
       ) {
         const uri = imageHash.current;
         const filename = uri.split("/").pop();
@@ -49,8 +47,8 @@ const AddProduct = () => {
     setProductName("");
     setPrice("");
     setDescription("");
-    imageHash.current = "https://www12.0zz0.com/2024/05/04/22/650784712.png";
-    imageUrl.current = "https://www12.0zz0.com/2024/05/04/22/650784712.png";
+    imageHash.current = "https://www9.0zz0.com/2024/05/10/19/728774942.png";
+    imageUrl.current = "https://www9.0zz0.com/2024/05/10/19/728774942.png";
   };
   const handleAddProduct = async () => {
     setError("");
