@@ -33,8 +33,8 @@ export default function TabsLayout() {
                 tabBarInactiveTintColor: "black",
                 tabBarStyle: {
                     height: 60,
-                    borderTopRightRadius: 25,
-                    borderTopLeftRadius: 25,
+                    // borderTopRightRadius: 25,
+                    // borderTopLeftRadius: 25,
                 },
             }}
         >

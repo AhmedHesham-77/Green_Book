@@ -46,6 +46,7 @@ async function updateUser(uid, user) {
   await updateDoc(usersColumn, {
     name: user.name,
     phone: user.phone,
+    birthOfDate:user.date
   });
 }
 

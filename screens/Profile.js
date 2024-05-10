@@ -34,11 +34,16 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import Button from "../components/Button";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 export default function Profile() {
     const [userData, setUserData] = useState(null);
     const [id, setId] = useState("");
     const [name, setName] = useState("");
+    const [newName, setNewName] = useState("");
+    const [newPhone, setNewPhone] = useState("");
+    const [changePhone, setChangePhone] = useState(true);
+    const [changeName, setChangeName] = useState(true);
     const [phone, setPhone] = useState("");
     const [date, setDate] = useState("");
     const [image, setImage] = useState("");
@@ -46,6 +51,46 @@ export default function Profile() {
     const [error, setError] = useState("");
     const bottomSheetModalRef = useRef(null);
     const snapPoints = useMemo(() => ["40%", "50%"], []);
+    const [birthdate, setBirthDate] = useState(new Date());
+    const [showPicker, setShowPicker] = useState(false);
+    const [dateOfBirth, setDateOfBirth] = useState("");
+    const [dateChanged, setDateChanged] = useState(false);
+    const [x, setX] = useState(0)
+
+    // set max year 10 years from current date
+    const currentDate = new Date();
+    const maxDate = new Date();
+    maxDate.setFullYear(currentDate.getFullYear() - 10);
+    maxDate.setDate(31);
+    maxDate.setMonth(11);
+
+    const minDate = new Date();
+    minDate.setFullYear(currentDate.getFullYear() - 70);
+    minDate.setDate(31);
+    minDate.setMonth(11);
+
+    const togglePicker = () => {
+        setShowPicker(!showPicker);
+    }
+
+    const formatDate = (date) => {
+        let nwdate = new Date(date);
+        let year = nwdate.getFullYear();
+        let month = nwdate.getMonth() + 1;
+        let day = nwdate.getDate();
+        return `${day}-${month}-${year}`;
+    }
+
+    const onChangeDate = ({type}, selectedDate) => {
+        if (type === 'set') {
+            const newDate = selectedDate;
+            setBirthDate(newDate);
+            togglePicker();
+            setDateOfBirth(formatDate(newDate));
+            setDateChanged(true)
+        } else
+            togglePicker();
+    }
 
     const handlePresentModalPress = useCallback(() => {
         bottomSheetModalRef.current?.present();
@@ -75,6 +120,7 @@ export default function Profile() {
         }
     };
 
+
     useFocusEffect(
         useCallback(() => {
             const fetchData = async () => {
@@ -94,7 +140,7 @@ export default function Profile() {
                 }
             };
             fetchData();
-        }, [])
+        }, [x])
     );
 
     const handleLogout = async () => {
@@ -113,8 +159,12 @@ export default function Profile() {
         setError("");
 
         try {
-            const user = {name: name, phone: phone};
+            const user = {name: name, phone: phone, date: dateOfBirth};
             await updateUser(userData.id, user);
+            setNewName(name)
+            setNewPhone(phone)
+            setChangeName(true)
+            setChangePhone(true)
             Alert.alert(
                 "Success",
                 "Profile successfully updated",
@@ -123,6 +173,7 @@ export default function Profile() {
                 ],
                 {cancelable: false}
             );
+            setX((x + 1) % 4)
         } catch (error) {
             console.log(error);
             setError(error.message);
@@ -167,7 +218,7 @@ export default function Profile() {
                     <FontAwesome5 name="coins" size={30} color="orange"/>
                     <TextInput
                         style={styles.textInputBalance}
-                        value={balance.toString()} // Convert balance to string
+                        value={balance.toString()}
                         editable={false}
                     />
                 </View>
@@ -212,6 +263,25 @@ export default function Profile() {
                                 placeholder="Enter new phone number"
                                 onChangeText={setPhone}
                             />
+                        </BottomSheetView>
+                        <BottomSheetView style={styles.input}>
+                            {showPicker && (<DateTimePicker
+                                mode="date"
+                                display="spinner"
+                                value={birthdate}
+                                onChange={onChangeDate}
+                                minimumDate={minDate}
+                                maximumDate={maxDate}
+                            />)}
+                            {!showPicker && (<Pressable onPress={togglePicker}>
+                                <TextInput
+                                    placeholder="Date of Birth"
+                                    value={onChangeDate ? dateOfBirth : date}
+                                    editable={false}
+                                    onChangeText={setBirthDate.toString()}
+                                    style={styles.date}
+                                />
+                            </Pressable>)}
                         </BottomSheetView>
                         <Pressable onPress={handleUpdate}>
                             <Text style={styles.buttonText}> Update </Text>

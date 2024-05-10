@@ -9,6 +9,7 @@ import {Feather, FontAwesome} from "@expo/vector-icons";
 import ProductCard from "../components/ProductCard";
 import {deleteProduct, getProducts} from "../firebase/products";
 import ProductSearch from "../components/ProductSearch";
+import BackButton from "../components/BackButton";
 
 export default function Search() {
     const [searchText, setSearchText] = useState("");
@@ -34,6 +35,7 @@ export default function Search() {
 
     return (
         <View style={styles.container}>
+            <BackButton/>
             <TextInput
                 style={styles.input}
                 placeholder="Search For"
@@ -56,7 +58,7 @@ export default function Search() {
 }
 const styles = StyleSheet.create({
     container: {
-        // flex: 1,
+        flex: 1,
         backgroundColor: "#FFF",
         paddingHorizontal: 10,
         paddingVertical: 20,
@@ -80,6 +82,6 @@ const styles = StyleSheet.create({
     flatList: {
         width: '100%',
         alignItems: 'center',
-        paddingHorizontal: 10,
+        // paddingHorizontal: 10,
     },
 });
