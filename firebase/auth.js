@@ -52,34 +52,9 @@ async function reset(email) {
     await sendPasswordResetEmail(auth, email);
 }
 
-const signInWithGoogle = async () => {
-    try {
-        console.log(2222);
-
-        const result = await signInWithPopup(auth, googleProvider)
-        console.log(11111);
-        GoogleAuthProvider.credentialFromResult(result);
-
-
-        console.log("result", result);
-        await setDoc(doc(db, "users", auth.currentUser.uid), {
-            name: result.user.displayName,
-            email: result.user.email,
-            phone: result.user.phoneNumber,
-            profile_image: result.user.photoURL,
-            birthOfDate: null,
-            isAdmin: false,
-            balance: 100,
-        });
-
-    } catch (error) {
-        console.log(error);
-
-    }
-};
 
 async function logout() {
     await signOut(auth);
 }
 
-export {register, signInWithGoogle, login, logout, reset, isSignedIn};
+export {register, login, logout, reset, isSignedIn};
