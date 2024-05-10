@@ -13,7 +13,8 @@ async function addToCart(uid, product) {
         const data = {
             productName: product.productName,
             price: product.price,
-            counter: 1
+            counter: 1,
+            ImageUrl: product.ImageUrl
         }
 
         await setDoc(doc(db, `users/${uid}/myCart`, product.id), data);
