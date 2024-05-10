@@ -12,7 +12,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  Pressable,
+  Pressable, Alert,
 } from "react-native";
 import { editProduct, getProduct } from "../firebase/products";
 import Loading from "../components/Loading";
@@ -29,7 +29,7 @@ import {
   BottomSheetBackdrop,
 } from "@gorhom/bottom-sheet";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { router } from "expo-router";
+import {router, useFocusEffect} from "expo-router";
 import AntDesign from "@expo/vector-icons/AntDesign";
 
 export default function Product({ id }) {
@@ -64,36 +64,40 @@ export default function Product({ id }) {
 
   const balance = useRef();
 
-  useEffect(() => {
-    const getUid = async () => {
-      try {
-        const user = await AsyncStorage.getItem("user");
-        const userUid = JSON.parse(user).uid;
-        setUid(userUid);
-        const userData = await getUser(userUid);
-        balance.current = userData.balance;
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getUid();
-  }, []);
+  useFocusEffect(
+      React.useCallback(() => {
+        const getUid = async () => {
+          try {
+            const user = await AsyncStorage.getItem("user");
+            const userUid = JSON.parse(user).uid;
+            setUid(userUid);
+            const userData = await getUser(userUid);
+            balance.current = userData.balance;
+          } catch (error) {
+            console.log(error);
+          }
+        };
+        getUid();
+      }, [])
+  );
 
-  useEffect(() => {
-    const getProductById = async () => {
-      setLoaded(false);
-      const p = await getProduct(id);
-      if (!p) {
-        alert("Product not found");
-        router.navigate("(tabs)");
-        return;
-      }
-      setProduct(p);
-      setLoaded(true);
-    };
-    getProductById();
-    setReview(1);
-  }, [id]);
+  useFocusEffect(
+      React.useCallback(() => {
+        const getProductById = async () => {
+          setLoaded(false);
+          const p = await getProduct(id);
+          if (!p) {
+            alert("Product not found");
+            router.navigate("(tabs)");
+            return;
+          }
+          setProduct(p);
+          setLoaded(true);
+        };
+        getProductById();
+        setReview(1);
+      }, [id])
+  );;
 
   const handleStarClick = (rating) => {
     setReview(rating);
@@ -130,9 +134,11 @@ export default function Product({ id }) {
       item.counter += quantity;
       await editFromCart(uid, item);
       setQuantity(1);
+      Alert.alert('Product Added.' , 'The product has been successfully added.' , [{ text: 'OK'}] );
       return;
     }
     await addToCart(uid, product, quantity);
+    Alert.alert('Product Added.' , 'The product has been successfully added.' , [{ text: 'OK'}] );
     setQuantity(1);
   };
 

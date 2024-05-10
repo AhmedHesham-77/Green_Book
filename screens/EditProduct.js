@@ -17,7 +17,7 @@ const EditProduct = ({ id }) => {
   const imageHash = useRef(
     "https://www12.0zz0.com/2024/05/04/22/650784712.png"
   );
-  const imageUrl = useRef("https://www12.0zz0.com/2024/05/04/22/650784712.png");
+  const imageUrl = useRef("https://www9.0zz0.com/2024/05/10/19/728774942.png");
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -33,6 +33,7 @@ const EditProduct = ({ id }) => {
 
   const handleDeleteProduct = async () => {
     await deleteProduct(product.id);
+    Alert.alert('Product Deleted.' , 'The product has been successfully deleted.' , [{ text: 'OK'}] );
     router.navigate("(tabs)");
   };
   const getProductById = async () => {
@@ -169,6 +170,7 @@ const EditProduct = ({ id }) => {
         />
         <Button
           title={"Delete Product"}
+          textColor="white"
           onPress={handleDeleteProduct}
           styles={({ pressed }) => [
             { opacity: pressed ? 0.2 : 1 },
@@ -179,11 +181,11 @@ const EditProduct = ({ id }) => {
               borderColor: "#a4ed80",
               paddingVertical: 12,
               paddingHorizontal: 20,
-              marginTop: 30,
+              marginTop: 5,
               marginBottom: 20,
               width: "80%",
               borderRadius: 10,
-              backgroundColor: "#246c3a",
+              backgroundColor: "red",
             },
           ]}
         />

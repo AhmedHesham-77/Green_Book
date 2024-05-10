@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { View, TextInput, Text, StyleSheet } from "react-native";
+import {View, TextInput, Text, StyleSheet, Alert} from "react-native";
 import Button from "../components/Button";
 import { addProduct } from "../firebase/products";
 import { uploadImage } from "../firebase/config";
@@ -83,7 +83,7 @@ const AddProduct = () => {
         if (!ref) {
           throw Error("could not add product");
         }
-        alert("Product added successfully.");
+        Alert.alert('Product Added.' , 'The product has been successfully added.' , [{ text: 'OK'}] );
         clearData();
       } catch (err) {
         setError(err.message);
