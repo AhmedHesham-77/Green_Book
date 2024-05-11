@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef, useMemo, useCallback} from "react";
+import React, {useState, useRef, useMemo, useCallback} from "react";
 import {
     View,
     Image,
@@ -21,20 +21,17 @@ import {router, useFocusEffect} from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {updateUser, updateUserImage} from "../firebase/users";
 import Loading from "../components/Loading";
-import Dialog from "react-native-dialog";
 import {getUser} from "../firebase/users";
 import * as ImagePicker from "expo-image-picker";
 import {uploadImage} from "../firebase/config";
-import BottomSheet, {
+import  {
     BottomSheetModal,
     BottomSheetView,
     BottomSheetModalProvider,
-    BottomSheetBackdrop,
     BottomSheetTextInput,
 } from "@gorhom/bottom-sheet";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import Button from "../components/Button";
-import DateTimePicker from "@react-native-community/datetimepicker";
 
 export default function Profile() {
     const [userData, setUserData] = useState(null);
@@ -100,8 +97,12 @@ export default function Profile() {
     );
 
     const handleLogout = async () => {
-        await logout();
-        router.navigate("/account/login");
+        try {
+            await logout();
+            router.navigate("/account/login");
+        }catch (error){
+            console.log(error);
+        }
     };
 
     const handleUpdate = async () => {
